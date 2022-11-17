@@ -33,8 +33,34 @@ void Rectangle::update_rect() {
 
 void Rectangle::update(float dT) {
 	_pos = _pos+ _velocity.by(dT);
+	check_collision();
 	SDL_Log("merde !");
 	
+}
+
+void Rectangle::check_collision() {
+	for (auto r : _scene->get_items()) {
+		if (r != this) {
+			if (is_in_collision(*r)) {
+				_color = Color{ 255,0,0 };
+			}
+			else {
+				_color = Color{ 255,255,255 };
+			}
+		}
+	}
+
+}
+bool Rectangle::is_in_collision(const Rectangle& r) {
+	if ((_pos.x >= r._pos.x + r._width) ||
+		(_pos.x + _width <= r._pos.x) ||
+		(_pos.y >= r._pos.y + r._height) ||
+		(_pos.y + _height <= r._pos.y)) {
+		return false;
+	}
+	else {
+		return true;
+	}
 }
 
 void Rectangle::draw(SDL_Renderer* renderer) {

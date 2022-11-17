@@ -15,11 +15,11 @@ int main(int argc, char* argv[])
     sq.set_Scene(&s);
 
     
-    Rectangle r1(50, 50, 50, 50, Color{ 255,255,0 });
-    r1.set_velocity(Vector{ 20,0 });
+    Rectangle r1(50, 50, 50, 50, Color{ 255,255,255 });
+    r1.set_velocity(Vector{ 100,0 });
     s.add_item(&r1);
 
-    Rectangle r2(50, 50, 20, 20, Color{ 255,0,255 });
+    Rectangle r2(200, 50, 20, 20, Color{ 255,255,255 });
     r2.set_velocity(Vector{ 0,300 });
     s.add_item(&r2);
 
@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
     while (sq.is_game_up())
     {
         
-        if (r2.get_pos().y > 500) {
+        if (r2.get_pos().y > 100) {
             r2.set_velocity(Vector{ 0,-300 });
         }
         if (r2.get_pos().y <0)

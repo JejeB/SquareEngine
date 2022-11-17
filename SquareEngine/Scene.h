@@ -19,6 +19,7 @@ public:
 	void set_debug() { _debug = true; };
 	void set_origin(Vector c) { _origin = c; }
 	Vector get_origin() { return _origin; }
+	std::vector<Rectangle*> get_items() { return _items; }
 	void update(float dT);
 	void draw(SDL_Renderer* renderer);
 
