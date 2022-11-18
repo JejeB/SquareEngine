@@ -12,8 +12,14 @@ struct Vector
 	}
 	Vector operator-(Vector v) {
 		Vector r;
-		r.x = v.x - x;
-		r.y = v.y - y;
+		r.x = x - v.x;
+		r.y = y - v.y;
+		return r;
+	}
+	Vector operator/(Vector v) {
+		Vector r;
+		r.x = x / v.x;
+		r.y = y / v.y;
 		return r;
 	}
 	Vector opp() {

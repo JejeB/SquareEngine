@@ -9,8 +9,6 @@ SquareEngine::SquareEngine(int w, int h): _width(w),_height(h) {
     _scene = NULL;
     _isOpen = true;
     _events.type = 0;
-    
-    
 }
 
 int SquareEngine::game_init() {
@@ -31,7 +29,7 @@ int SquareEngine::game_init() {
 }
 
 void SquareEngine::game_loop() {
-
+    int x; int y;
         while (SDL_PollEvent(&_events))
         {
             switch (_events.type)
@@ -42,14 +40,20 @@ void SquareEngine::game_loop() {
             }
             
         }
+        SDL_PumpEvents();
+        SDL_GetMouseState(&x, &y);
+        _mouse_pos.x = (float)x;
+        _mouse_pos.y = (float)y;
         SDL_SetRenderDrawColor(_pRenderer, 0, 0, 0, 255);
         SDL_RenderClear(_pRenderer);
 
         Uint32 time = SDL_GetTicks();
         float dT = (time - _last_update) / 1000.0f;
         if (_scene != NULL) {
+            //Update
             _scene->update(dT);
             _last_update = time;
+            //Draw
             _scene->draw(_pRenderer);
         }
 

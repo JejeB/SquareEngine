@@ -4,37 +4,35 @@
 #include "SquareEngine.h"
 #include "Scene.h"
 #include "Rectangle.h"
+#include "Vector.h"
 
 int main(int argc, char* argv[])
 {
     SquareEngine sq(800, 600);
-    
+
     Scene s;
     s.set_debug();
-    s.set_origin(Vector{ 50,50 });
+    s.set_origin(Vector{ 0,0 });
     sq.set_Scene(&s);
 
     
-    Rectangle r1(50, 50, 50, 50, Color{ 255,255,255 });
-    r1.set_velocity(Vector{ 100,0 });
-    s.add_item(&r1);
-
-    Rectangle r2(200, 50, 20, 20, Color{ 255,255,255 });
-    r2.set_velocity(Vector{ 0,300 });
+    Rectangle r2(520, 500, 20, 20, Color{ 255,255,255 });
     s.add_item(&r2);
 
+    Rectangle r1(500, 30, 3, 500, Color{ 255,255,255 });
+    s.add_item(&r1);
+
+    Rectangle r3(520, 30, 9, 500, Color{ 255,255,255 });
+    s.add_item(&r3);
+
+    
 
     sq.game_init();
     while (sq.is_game_up())
     {
-        
-        if (r2.get_pos().y > 100) {
-            r2.set_velocity(Vector{ 0,-300 });
-        }
-        if (r2.get_pos().y <0)
-        {
-            r2.set_velocity(Vector{ 0,300 });
-        }
+        Vector r = r2.get_pos();
+        SDL_Log("%f %f", (r-sq.mouse_pos()).x, (r-sq.mouse_pos()).y);
+        r2.set_velocity( (sq.mouse_pos()-r).by(10));
         sq.game_loop();
     }
     sq.game_close();
