@@ -119,8 +119,8 @@ void Rectangle::draw(SDL_Renderer* renderer) {
 	SDL_RenderDrawRect(renderer,&_rect_dis);
 	
 
-	SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
-	SDL_RenderDrawLineF(renderer, _pos.x, _pos.y, _desti.x,_desti.y);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+	SDL_RenderDrawLineF(renderer, _scene->get_origin().x+_pos.x, _scene->get_origin().y+_pos.y, _scene->get_origin().x+ _desti.x, _scene->get_origin().y+_desti.y);
 	
 }
 

@@ -8,11 +8,11 @@
 
 int main(int argc, char* argv[])
 {
-    SquareEngine sq(800, 600);
+    SquareEngine sq(1080, 720);
 
     Scene s;
     s.set_debug();
-    s.set_origin(Vector{ 0,0 });
+    s.set_origin(Vector{30,100 });
     sq.set_Scene(&s);
 
     
@@ -31,8 +31,7 @@ int main(int argc, char* argv[])
     while (sq.is_game_up())
     {
         Vector r = r2.get_pos();
-        SDL_Log("%f %f", (r-sq.mouse_pos()).x, (r-sq.mouse_pos()).y);
-        r2.set_velocity( (sq.mouse_pos()-r).by(10));
+        r2.set_velocity( (s.map_to_view(sq.mouse_pos())-r).by(5));
         sq.game_loop();
     }
     sq.game_close();

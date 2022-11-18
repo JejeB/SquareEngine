@@ -20,7 +20,7 @@ public:
 	void set_origin(Vector c) { _origin = c; }
 	Vector get_origin() { return _origin; }
 	std::vector<Rectangle*> get_items() { return _items; }
-	Vector map_to_view(Vector v) { return  _origin-v; }
+	Vector map_to_view(Vector v) { return v- _origin; }
 	void update(float dT);
 	void draw(SDL_Renderer* renderer);
 
