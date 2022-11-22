@@ -33,7 +33,7 @@ public:
 	void draw(SDL_Renderer * renderer);
 	void translate(Vector v);
 	bool is_in_collision(const Rectangle& r);
-	bool ray_collision(Vector r_origin, Vector r_dest, int width, int heigth);
+	bool ray_collision(Vector r_origin, Vector r_dest, int width, int heigth,Vector & normal);
 	void collision();
 
 private:

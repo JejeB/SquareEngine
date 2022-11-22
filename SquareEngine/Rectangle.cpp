@@ -47,27 +47,33 @@ void Rectangle::update(float dT) {
 
 void Rectangle::check_collision() {
 	std::vector<Rectangle*> collider;
+	std::vector<Vector> normals;
 	for (auto r : _scene->get_items()) {
+		Vector n;
 		if (r != this) {
-			if (r->ray_collision(_pos,_desti,_width,_height)) {
+			if (r->ray_collision(_pos,_desti,_width,_height,n)) {
 				collider.push_back(r);
+				normals.push_back(n);
 			}
 		}
 	}
 	
 	if (collider.size() == 0) {
 		_in_collision = false;
-		_color = Color{ 255,255,255 };
+		//_color = Color{ 255,255,255 };
 	}
 	else {
 		_in_collision = true;
-		_color = Color{ 255,0,0 };
+		for (auto v : normals) {
+			Vector correction = _velocity.abs() * v;
+			_velocity = _velocity + correction;
+		}
 	}
 }
 
 void Rectangle::collision(){}
 
-bool Rectangle::ray_collision(Vector r_origin,Vector r_vec, int width_target, int height_target) {
+bool Rectangle::ray_collision(Vector r_origin,Vector r_vec, int width_target, int height_target,Vector &normal) {
 	
 	Vector exp_pos{ _pos.x - width_target ,_pos.y - height_target };
 	Vector exp_size; exp_size.x = _width + width_target; exp_size.y = _height + height_target;
@@ -96,6 +102,17 @@ bool Rectangle::ray_collision(Vector r_origin,Vector r_vec, int width_target, in
 	_contact_point.x = r_origin.x + t_hit_near * dist.x;
 	_contact_point.y = r_origin.y + t_hit_near * dist.y;
 
+	if (t_near.x > t_near.y)
+		if (dist.x < 0)
+			normal = { 1, 0 };
+		else
+			normal = { -1, 0 };
+	else if (t_near.x < t_near.y)
+		if (dist.y < 0)
+			normal = { 0, 1 };
+		else
+			normal = { 0, -1 };
+
 	
 	return true;
 
@@ -121,7 +138,8 @@ void Rectangle::draw(SDL_Renderer* renderer) {
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 	SDL_RenderDrawLineF(renderer, _scene->get_origin().x+_pos.x, _scene->get_origin().y+_pos.y, _scene->get_origin().x+ _desti.x, _scene->get_origin().y+_desti.y);
-	
+	//SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+	//SDL_RenderDrawPoint(renderer, _scene->get_origin().x + _contact_point.x, _scene->get_origin().y + _contact_point.y);
 }
 
 void Rectangle::translate(Vector v) {
