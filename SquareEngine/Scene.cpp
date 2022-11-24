@@ -8,8 +8,10 @@ Scene::Scene():_debug(false){
 	_origin.x = 0; _origin.y = 0;
 }
 
-void Scene::init() {
-	
+void Scene::init(SDL_Renderer* renderer) {
+	for (Rectangle* item : _items) {
+		item->init(renderer);
+	}
 }
 
 

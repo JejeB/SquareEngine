@@ -20,8 +20,8 @@ int main(int argc, char* argv[])
     s.set_origin(Vector{0,0 });
     sq.set_Scene(&s);
 
-    Rectangle player(500,0,20,40,Color{255,0,0});
-    player.add_gravity();
+    Rectangle player(500,0,30,30,Color{0,0,0});
+    player.add_sprite("sprite.gif");
     s.add_item(&player);
 
     Rectangle ob1(400, 400, 200, 40, Color{ 255,255,255 });
@@ -39,8 +39,8 @@ int main(int argc, char* argv[])
     sq.game_init();
     while (sq.is_game_up())
     {
-        float v_x = s.map_to_scene(sq.mouse_pos()).x- player.get_pos().x;
-        player.set_velocity( Vector{v_x,player.get_velocity().y});
+        Vector v = s.map_to_scene(sq.mouse_pos())- player.get_pos();
+        player.set_velocity(v.by(5));
         sq.game_loop();
     }
     sq.game_close();

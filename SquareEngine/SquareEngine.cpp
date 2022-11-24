@@ -23,6 +23,8 @@ int SquareEngine::game_init() {
         SDL_Quit(); 
         return EXIT_FAILURE;
     }
+
+        _scene->init(_pRenderer);
     srand(time(NULL));
     _last_update = SDL_GetTicks();
     return EXIT_SUCCESS;

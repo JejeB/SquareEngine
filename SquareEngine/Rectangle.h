@@ -2,7 +2,9 @@
 #include"Vector.h"
 #include "Color.h"
 #include <SDL.h>
+#include <string>
 #include<map>
+#include <SDL_image.h>
 
 class Scene;
 
@@ -23,6 +25,9 @@ class Rectangle
 	const float GRAV = 9.8;
 	const float MAX_DROP = 500;
 
+	std::string _sprite_path;
+	SDL_Texture * _sprite;
+
 public:
 	Rectangle(float x, float y, int w, int h, Color c);
 	Rectangle(Vector pos, int w, int h);
@@ -40,8 +45,9 @@ public:
 
 	Vector get_contact_point() { return _contact_point; }
 	
+	void add_sprite(const std::string path) { _sprite_path = path; }
 	
-	void init();
+	void init(SDL_Renderer* renderer);
 	void update(float dT);
 	void draw(SDL_Renderer * renderer);
 	void translate(Vector v);

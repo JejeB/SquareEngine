@@ -11,16 +11,23 @@ Rectangle::Rectangle(Vector pos, int w, int h) :_pos(pos), _width(w), _height(h)
 	_scene = NULL;
 }
 
-Rectangle::Rectangle(float x, float y, int w, int h, Color c):_width(w),_height(h),_color(c) {
+Rectangle::Rectangle(float x, float y, int w, int h, Color c):_width(w),_height(h),_color(c),_sprite(NULL) {
 	_pos.x = x; _pos.y = y;
 	_velocity.x = 0; _velocity.y=0;
 	_contact_point.x = 0; _contact_point.y = 0;
 	_in_collision = false;
 	_scene = NULL;
 	_is_affected_by_gravity = false;
+	_sprite_path.clear();
 }
 
-void Rectangle::init(){}
+void Rectangle::init(SDL_Renderer* renderer){
+	if (!_sprite_path.empty()) {
+		SDL_Surface* image = IMG_Load(_sprite_path.c_str());
+		 _sprite = SDL_CreateTextureFromSurface(renderer, image);
+		SDL_FreeSurface(image);
+	}
+}
 
 void Rectangle::set_velocity(Vector v) {
 	_velocity = v;
@@ -135,6 +142,10 @@ void Rectangle::draw(SDL_Renderer* renderer) {
 	update_rect();
 	SDL_SetRenderDrawColor(renderer, _color.r, _color.g, _color.b, 255);
 	SDL_RenderDrawRect(renderer,&_rect_dis);
+
+	if (_sprite != NULL) {
+		SDL_RenderCopy(renderer, _sprite, nullptr, &_rect_dis);
+	}
 }
 
 void Rectangle::translate(Vector v) {

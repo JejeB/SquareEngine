@@ -13,7 +13,7 @@ class Scene
 	bool _debug;
 public:
 	Scene();
-	void init();
+	void init(SDL_Renderer* renderer);
 	
 	std::vector<Rectangle*> get_items() { return _items; }
 	void add_item(Rectangle * r);
