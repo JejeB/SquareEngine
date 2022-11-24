@@ -53,6 +53,8 @@ public:
 	void translate(Vector v);
 	bool ray_collision(Vector r_origin, Vector r_dest, int width, int heigth,Vector & normal);
 	void add_gravity() { _is_affected_by_gravity = true; }
+
+	void event(SDL_Event _event);
 	
 
 private:

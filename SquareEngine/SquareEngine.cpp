@@ -40,6 +40,7 @@ void SquareEngine::game_loop() {
                 _isOpen = false;
                 break;
             }
+
             
         }
         SDL_PumpEvents();
