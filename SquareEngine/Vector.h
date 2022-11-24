@@ -1,4 +1,5 @@
 #pragma once
+#include <cmath>
 struct Vector
 {
 	float x;
@@ -45,6 +46,9 @@ struct Vector
 		r.x = x > 0 ? x : -x;
 		r.y = y > 0 ? y : -y;
 		return r;
+	}
+	float dist(Vector v) {
+		return sqrt(((v.x - x)*(v.x - x))+((v.y - y)*(v.y - y)));
 	}
 };
 

@@ -1,13 +1,13 @@
 #include <algorithm>
 #include <functional>
 #include <math.h>
+#include <map>
 
 #include "Rectangle.h"
 #include "Scene.h"
 
 
 Rectangle::Rectangle(Vector pos, int w, int h) :_pos(pos), _width(w), _height(h) {
-	
 	_scene = NULL;
 }
 
@@ -38,40 +38,47 @@ void Rectangle::update_rect() {
 }
 
 void Rectangle::update(float dT) {
-	_desti = _pos + _velocity.by(dT);
-	check_collision();
-	_pos = _pos+ _velocity.by(dT);
-	
-	
+	_instant_velocity = _velocity;
+	check_collision(dT);
+	_pos = _pos+ _instant_velocity.by(dT);
 }
 
-void Rectangle::check_collision() {
-	std::vector<Rectangle*> collider;
-	std::vector<Vector> normals;
+void Rectangle::check_collision(float dT) {
+	std::map<float, Rectangle*> collisions;
+	
 	for (auto r : _scene->get_items()) {
 		Vector n;
 		if (r != this) {
-			if (r->ray_collision(_pos,_desti,_width,_height,n)) {
-				collider.push_back(r);
-				normals.push_back(n);
+			if (r->ray_collision(_pos, _pos + _instant_velocity.by(dT),_width,_height,n)) {
+				const float dist = _pos.dist(r->get_contact_point());
+				collisions[dist] = r;
 			}
 		}
 	}
-	
-	if (collider.size() == 0) {
+	if (collisions.size() == 0) {
 		_in_collision = false;
-		//_color = Color{ 255,255,255 };
 	}
 	else {
 		_in_collision = true;
-		for (auto v : normals) {
-			Vector correction = _velocity.abs() * v;
-			_velocity = _velocity + correction;
+		on_collision(collisions);
+		rigid_body_collision_resolve(dT, collisions);
+	}
+}
+
+void Rectangle::rigid_body_collision_resolve(float dT, std::map<float, Rectangle*> collisions) {
+	//Resolve collision test again to check if is still in collision with another rectangle
+	for (auto it : collisions) {
+		Vector normal;
+		if (it.second->ray_collision(_pos, _pos + _instant_velocity.by(dT), _width, _height, normal)) {
+			Vector correction = _instant_velocity.abs() * normal;
+			_instant_velocity = _instant_velocity + correction;
 		}
 	}
 }
 
-void Rectangle::collision(){}
+void Rectangle::on_collision(std::map<float, Rectangle*> collisions){
+
+}
 
 bool Rectangle::ray_collision(Vector r_origin,Vector r_vec, int width_target, int height_target,Vector &normal) {
 	
@@ -118,28 +125,10 @@ bool Rectangle::ray_collision(Vector r_origin,Vector r_vec, int width_target, in
 
 }
 
-bool Rectangle::is_in_collision(const Rectangle& r) {
-	if ((_pos.x >= r._pos.x + r._width) ||
-		(_pos.x + _width <= r._pos.x) ||
-		(_pos.y >= r._pos.y + r._height) ||
-		(_pos.y + _height <= r._pos.y)) {
-		return false;
-	}
-	else {
-		return true;
-	}
-}
-
 void Rectangle::draw(SDL_Renderer* renderer) {
 	update_rect();
 	SDL_SetRenderDrawColor(renderer, _color.r, _color.g, _color.b, 255);
 	SDL_RenderDrawRect(renderer,&_rect_dis);
-	
-
-	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-	SDL_RenderDrawLineF(renderer, _scene->get_origin().x+_pos.x, _scene->get_origin().y+_pos.y, _scene->get_origin().x+ _desti.x, _scene->get_origin().y+_desti.y);
-	//SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-	//SDL_RenderDrawPoint(renderer, _scene->get_origin().x + _contact_point.x, _scene->get_origin().y + _contact_point.y);
 }
 
 void Rectangle::translate(Vector v) {

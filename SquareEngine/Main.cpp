@@ -10,34 +10,34 @@
 
 int main(int argc, char* argv[])
 {
+    int width = 1080;
+    int height = 720;
     srand(time(NULL));
-    SquareEngine sq(1080, 720);
+    SquareEngine sq(width, height);
 
     Scene s;
     s.set_debug();
-    s.set_origin(Vector{30,100 });
+    s.set_origin(Vector{0,0 });
     sq.set_Scene(&s);
 
-    std::vector<Rectangle *> army;
-    for (int i = 0; i < 70; i++) {
-        Rectangle * soldier= new Rectangle(rand()%300, rand() % 300, 5, 5, Color{255,255,255});
-        army.push_back(soldier);
-        s.add_item(soldier);
-    }
-
-    Rectangle r3(300, 400, 300, 20, Color{ 255,0,255 });
-    s.add_item(&r3);
-    Rectangle r1(500, 30, 30, 500, Color{ 255,255,255 });
-    s.add_item(&r1);
-
+    Rectangle r(100,100,200,20,Color{0,0,255});
+    r.set_velocity(Vector{ 200,0 });
+    s.add_item(&r);
     
+    Rectangle r2(400, 0, 20, 20, Color{ 0,0,255 });
+    r2.set_velocity(Vector{ 0,500 });
+    s.add_item(&r2);
 
     sq.game_init();
     while (sq.is_game_up())
     {
-        for (auto soldier : army) {
-            soldier->set_velocity((s.map_to_view(sq.mouse_pos()) - soldier->get_pos()).by(5));
+        if (r.get_pos().x < 0 || r.get_pos().x>800) {
+            r.set_velocity(r.get_velocity().opp());
         }
+        if (r2.get_pos().y < 0 || r2.get_pos().y>200) {
+            r2.set_velocity(r2.get_velocity().opp());
+        }
+
         sq.game_loop();
     }
     sq.game_close();

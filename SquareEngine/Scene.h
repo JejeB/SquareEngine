@@ -15,12 +15,19 @@ public:
 	Scene();
 	void init();
 	
+	std::vector<Rectangle*> get_items() { return _items; }
 	void add_item(Rectangle * r);
+
 	void set_debug() { _debug = true; };
 	void set_origin(Vector c) { _origin = c; }
 	Vector get_origin() { return _origin; }
-	std::vector<Rectangle*> get_items() { return _items; }
-	Vector map_to_view(Vector v) { return v- _origin; }
+	
+
+	Vector map_to_scene(Vector v) { return v - _origin; }
+	Vector map_to_view(Vector v) { return  _origin-v; }
+	
+	void set_Camera(Vector focus, int width, int height) { _origin.x = width / 2 - focus.x; _origin.y = height / 2 - focus.y; }
+	
 	void update(float dT);
 	void draw(SDL_Renderer* renderer);
 

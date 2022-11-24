@@ -21,12 +21,12 @@ class SquareEngine
 public:
 	SquareEngine(int w, int h);
 	void set_Scene(Scene* s) { _scene = s; }
-	int game_init();
+	
 	bool is_game_up() { return _isOpen; }
 	Vector mouse_pos() { return _mouse_pos; }
+	
+	int game_init();
 	void game_loop();
 	void game_close();
-	
-
 };
 
