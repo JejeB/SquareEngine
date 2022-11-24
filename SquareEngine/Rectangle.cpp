@@ -17,6 +17,7 @@ Rectangle::Rectangle(float x, float y, int w, int h, Color c):_width(w),_height(
 	_contact_point.x = 0; _contact_point.y = 0;
 	_in_collision = false;
 	_scene = NULL;
+	_is_affected_by_gravity = false;
 }
 
 void Rectangle::init(){}
@@ -38,7 +39,12 @@ void Rectangle::update_rect() {
 }
 
 void Rectangle::update(float dT) {
+	if (_is_affected_by_gravity) {
+		_velocity.y = GRAV + _velocity.y;
+		_velocity.y = _velocity.y > MAX_DROP ? MAX_DROP : _velocity.y;
+	}
 	_instant_velocity = _velocity;
+
 	check_collision(dT);
 	_pos = _pos+ _instant_velocity.by(dT);
 }

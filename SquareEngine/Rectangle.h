@@ -19,6 +19,10 @@ class Rectangle
 	Scene* _scene;
 	bool _in_collision;
 
+	bool _is_affected_by_gravity;
+	const float GRAV = 9.8;
+	const float MAX_DROP = 500;
+
 public:
 	Rectangle(float x, float y, int w, int h, Color c);
 	Rectangle(Vector pos, int w, int h);
@@ -42,6 +46,7 @@ public:
 	void draw(SDL_Renderer * renderer);
 	void translate(Vector v);
 	bool ray_collision(Vector r_origin, Vector r_dest, int width, int heigth,Vector & normal);
+	void add_gravity() { _is_affected_by_gravity = true; }
 	
 
 private:

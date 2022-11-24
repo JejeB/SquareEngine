@@ -20,24 +20,27 @@ int main(int argc, char* argv[])
     s.set_origin(Vector{0,0 });
     sq.set_Scene(&s);
 
-    Rectangle r(100,100,200,20,Color{0,0,255});
-    r.set_velocity(Vector{ 200,0 });
-    s.add_item(&r);
-    
-    Rectangle r2(400, 0, 20, 20, Color{ 0,0,255 });
-    r2.set_velocity(Vector{ 0,500 });
-    s.add_item(&r2);
+    Rectangle player(500,0,20,40,Color{255,0,0});
+    player.add_gravity();
+    s.add_item(&player);
+
+    Rectangle ob1(400, 400, 200, 40, Color{ 255,255,255 });
+    s.add_item(&ob1);
+
+    Rectangle ob2(50, 100, 50, 100, Color{ 255,255,255 });
+    s.add_item(&ob2);
+
+    Rectangle ob3(500, 100, 50, 100, Color{ 255,255,255 });
+    s.add_item(&ob3);
+
+    Rectangle ob4(400, 200, 50, 50, Color{ 255,255,255 });
+    s.add_item(&ob4);
 
     sq.game_init();
     while (sq.is_game_up())
     {
-        if (r.get_pos().x < 0 || r.get_pos().x>800) {
-            r.set_velocity(r.get_velocity().opp());
-        }
-        if (r2.get_pos().y < 0 || r2.get_pos().y>200) {
-            r2.set_velocity(r2.get_velocity().opp());
-        }
-
+        float v_x = s.map_to_scene(sq.mouse_pos()).x- player.get_pos().x;
+        player.set_velocity( Vector{v_x,player.get_velocity().y});
         sq.game_loop();
     }
     sq.game_close();
