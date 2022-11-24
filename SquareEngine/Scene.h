@@ -2,7 +2,7 @@
 #include <SDL.h>
 #include <vector>
 
-#include "Vector.h"
+#include "utils/Vector.h"
 
 #include "Rectangle.h"
 

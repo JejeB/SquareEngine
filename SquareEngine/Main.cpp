@@ -6,7 +6,7 @@
 #include "SquareEngine.h"
 #include "Scene.h"
 #include "Rectangle.h"
-#include "Vector.h"
+#include "utils/Vector.h"
 
 int main(int argc, char* argv[])
 {
@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
     s.set_origin(Vector{0,0 });
     sq.set_Scene(&s);
 
-    Rectangle player(500,0,30,30,Color{0,0,0});
+    Rectangle player(500,0,30,30,Color{0,0,255});
     player.add_sprite("sprite.gif");
     s.add_item(&player);
 
