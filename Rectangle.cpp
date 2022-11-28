@@ -25,7 +25,7 @@ void Rectangle::init(SDL_Renderer* renderer){
 	/*if (!_sprite_path.empty()) {
 		SDL_Surface* image = IMG_Load(_sprite_path.c_str());
 		 _sprite = SDL_CreateTextureFromSurface(renderer, image);
-		SDL_FreeSurface(image);
+	SDL_FreeSurface(image);
 	}*/
 }
 
