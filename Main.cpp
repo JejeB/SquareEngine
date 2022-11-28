@@ -20,8 +20,8 @@ int main(int argc, char* argv[])
     s.set_origin(Vector{0,0 });
     sq.set_Scene(&s);
 
-    Rectangle player(500,0,30,30,Color{0,0,255});
-    player.add_sprite("sprite.png");
+    Rectangle player(500,0,30,30,Color{0,0,0});
+    player.add_sprite("C:\\Users\\Jeremy Bonnefoi\\Documents\\im\\SDL2Test\\build\\Debug\\sprite.png");
     s.add_item(&player);
 
     Rectangle ob1(400, 400, 200, 40, Color{ 255,255,255 });

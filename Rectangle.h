@@ -2,6 +2,7 @@
 #include"utils/Vector.h"
 #include "utils/Color.h"
 #include "SDL.h"
+#include "SDL_image.h"
 #include <string>
 #include<map>
 
@@ -25,7 +26,7 @@ class Rectangle
 	const float MAX_DROP = 500;
 
 	std::string _sprite_path;
-	//SDL_Texture * _sprite;
+	SDL_Texture * _sprite;
 
 public:
 	Rectangle(float x, float y, int w, int h, Color c);

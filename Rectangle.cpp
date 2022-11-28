@@ -19,14 +19,15 @@ Rectangle::Rectangle(float x, float y, int w, int h, Color c):_width(w),_height(
 	_scene = NULL;
 	_is_affected_by_gravity = false;
 	_sprite_path.clear();
+	_sprite = NULL;
 }
 
 void Rectangle::init(SDL_Renderer* renderer){
-	/*if (!_sprite_path.empty()) {
+	if (!_sprite_path.empty()) {
 		SDL_Surface* image = IMG_Load(_sprite_path.c_str());
 		 _sprite = SDL_CreateTextureFromSurface(renderer, image);
 	SDL_FreeSurface(image);
-	}*/
+	}
 }
 
 void Rectangle::set_velocity(Vector v) {
@@ -143,9 +144,9 @@ void Rectangle::draw(SDL_Renderer* renderer) {
 	SDL_SetRenderDrawColor(renderer, _color.r, _color.g, _color.b, 255);
 	SDL_RenderDrawRect(renderer,&_rect_dis);
 
-	/*if (_sprite != NULL) {
+	if (_sprite != NULL) {
 		SDL_RenderCopy(renderer, _sprite, nullptr, &_rect_dis);
-	}*/
+	}
 }
 
 void Rectangle::translate(Vector v) {
