@@ -7,16 +7,15 @@
 #include "Scene.h"
 
 
-Rectangle::Rectangle(Vector pos, int w, int h) :_pos(pos), _width(w), _height(h) {
-	_scene = NULL;
+Rectangle::Rectangle(const Scene* scene, Vector pos, int w, int h) :_pos(pos), _width(w), _height(h) {
+	_scene = scene;
 }
 
-Rectangle::Rectangle(float x, float y, int w, int h, Color c):_width(w),_height(h),_color(c) {
+Rectangle::Rectangle(const Scene* scene, float x, float y, int w, int h, Color c):_width(w),_height(h),_color(c) {
 	_pos.x = x; _pos.y = y;
 	_velocity.x = 0; _velocity.y=0;
 	_contact_point.x = 0; _contact_point.y = 0;
-	_in_collision = false;
-	_scene = NULL;
+	_scene = scene;
 	_is_affected_by_gravity = false;
 	_sprite_path.clear();
 	_sprite = NULL;
@@ -60,28 +59,24 @@ void Rectangle::update(float dT) {
 void Rectangle::check_collision(float dT) {
 	std::map<float, Rectangle*> collisions;
 	
-	for (auto r : _scene->get_items()) {
+	for (const auto r : _scene->get_items()) {
 		Vector n;
 		if (r != this) {
 			if (r->ray_collision(_pos, _pos + _instant_velocity.by(dT),_width,_height,n)) {
 				const float dist = _pos.dist(r->get_contact_point());
-				collisions[dist] = r;
+				collisions[dist] = r; //Add the distance the the colliosion map, so the map is sorted by distance of collionsion
 			}
 		}
 	}
-	if (collisions.size() == 0) {
-		_in_collision = false;
-	}
-	else {
-		_in_collision = true;
+	if (collisions.size() != 0) {
 		on_collision(collisions);
-		rigid_body_collision_resolve(dT, collisions);
+		rigid_body_collision_resolve(dT,collisions);
 	}
 }
 
-void Rectangle::rigid_body_collision_resolve(float dT, std::map<float, Rectangle*> collisions) {
+void Rectangle::rigid_body_collision_resolve(float dT, const std::map<float, Rectangle*> collisions) {
 	//Resolve collision test again to check if is still in collision with another rectangle
-	for (auto it : collisions) {
+	for (const auto it : collisions) {
 		Vector normal;
 		if (it.second->ray_collision(_pos, _pos + _instant_velocity.by(dT), _width, _height, normal)) {
 			Vector correction = _instant_velocity.abs() * normal;
@@ -147,8 +142,4 @@ void Rectangle::draw(SDL_Renderer* renderer) {
 	if (_sprite != NULL) {
 		SDL_RenderCopy(renderer, _sprite, nullptr, &_rect_dis);
 	}
-}
-
-void Rectangle::translate(Vector v) {
-	_pos = _pos +v;
 }

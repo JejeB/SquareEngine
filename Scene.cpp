@@ -15,8 +15,7 @@ void Scene::init(SDL_Renderer* renderer) {
 }
 
 
-void Scene::add_item(Rectangle * r) {
-	r->set_scene(this);
+void Scene::add_item( Rectangle * r) {
 	_items.push_back(r);
 }
 

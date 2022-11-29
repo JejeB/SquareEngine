@@ -5,22 +5,37 @@
 #include "utils/Vector.h"
 
 #include "Rectangle.h"
-
+/*\brief Scene to display rectangle
+* 
+* The scene is a infine space to store and display the rectangle, by default the origin is at the same that the window bt you can change it
+* 
+*/
 class Scene
 {
-	Vector _origin;
-	std::vector<Rectangle*> _items;
-	bool _debug;
+	Vector _origin;/* Oringin of the scene it will be the 0,0 point foir all the rectangles*/
+	std::vector<Rectangle*> _items; /* List of rectangle to display and manage*/
+	bool _debug; /*Boolean to know if the class is in debug mode*/
 public:
 	Scene();
 	void init(SDL_Renderer* renderer);
-	
-	std::vector<Rectangle*> get_items() { return _items; }
+	/* \brief return all the items from the scene as readonly
+	*  \return : list of all rectangle in the scene
+	*/
+	std::vector<Rectangle*> get_items() const{ return _items; }
+	/* \brief add a new rectangle to the scene
+	* 
+	*/
 	void add_item(Rectangle * r);
-
+	/*\brief call this fonction to activate the debug mode
+	*
+	*/
 	void set_debug() { _debug = true; };
-	void set_origin(Vector c) { _origin = c; }
-	Vector get_origin() { return _origin; }
+	
+	/*\brief set a new origin to the scene 
+	*\param : Vector of the new origin in the window coordinates
+	*/
+	void set_origin(const Vector c) { _origin = c; }
+	Vector get_origin() const{ return _origin; }
 	
 
 	Vector map_to_scene(Vector v) { return v - _origin; }
