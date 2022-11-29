@@ -12,7 +12,7 @@
 */
 class Scene
 {
-	Vector _origin;/* Oringin of the scene it will be the 0,0 point foir all the rectangles*/
+	Vector _origin;/* Origin of the scene it will be the 0,0 point foir all the rectangles*/
 	std::vector<Rectangle*> _items; /* List of rectangle to display and manage*/
 	bool _debug; /*Boolean to know if the class is in debug mode*/
 public:

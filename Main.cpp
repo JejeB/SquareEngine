@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 {
     int width = 1080;
     int height = 720;
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     SquareEngine sq(width, height);
 
     Scene s;

@@ -25,7 +25,7 @@ int SquareEngine::game_init() {
     }
 
         _scene->init(_pRenderer);
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     _last_update = SDL_GetTicks();
     return EXIT_SUCCESS;
 }

@@ -34,12 +34,12 @@ void Rectangle::set_velocity(Vector v) {
 }
 void Rectangle::update_rect() {
 	if (_scene != NULL) {
-		_rect_dis.x = (int)_scene->get_origin().x + _pos.x;
-		_rect_dis.y = (int)_scene->get_origin().y + _pos.y;
+		_rect_dis.x = (int)(_scene->get_origin().x + _pos.x);
+		_rect_dis.y = (int)(_scene->get_origin().y + _pos.y);
 	}
 	else {
-		_rect_dis.x =  _pos.x;
-		_rect_dis.y =  _pos.y;
+		_rect_dis.x =(int)_pos.x;
+		_rect_dis.y =(int)_pos.y;
 	}
 	_rect_dis.w = _width;
 	_rect_dis.h = _height;
