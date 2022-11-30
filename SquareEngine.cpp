@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <time.h>
 
+using namespace Sq;
+
 SquareEngine::SquareEngine(int w, int h): _width(w),_height(h),_pWindow(nullptr),_pRenderer(nullptr),_events(),_isOpen(true),_scene(nullptr),_last_update(),_mouse_pos() 
 {}
 

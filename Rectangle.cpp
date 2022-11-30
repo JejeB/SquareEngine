@@ -6,6 +6,7 @@
 #include "Rectangle.h"
 #include "Scene.h"
 
+using namespace Sq;
 
 Rectangle::Rectangle(const Scene* scene, float x, float y, int w, int h, Color c,std::string sprite_path):_pos(Vector{x,y}), _width(w), _height(h), _color(c),_rect_dis(),_instant_velocity(Vector{0,0}),
 _velocity(Vector{ 0,0 }), _contact_point(Vector{0,0}), _scene(scene), _is_affected_by_gravity(false), _sprite_path(sprite_path),_sprite(nullptr)
@@ -87,7 +88,7 @@ void Rectangle::rigid_body_collision_resolve(float dT, const std::map<float, Rec
 	}
 }
 
-void Rectangle::on_collision(std::map<float, Rectangle*> collisions){
+void Rectangle::on_collision(std::map<float, Sq::Rectangle*> collisions){
 
 }
 

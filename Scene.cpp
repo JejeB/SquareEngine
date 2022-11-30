@@ -4,10 +4,12 @@
 
 #include "Rectangle.h"
 
+using namespace Sq;
+
 Scene::Scene():_origin(Vector{0,0}),_items(), _debug(false) 
 {}
 
-void Scene::init(SDL_Renderer* renderer) {
+void Sq::Scene::init(SDL_Renderer* renderer) {
 	for (Rectangle* item : _items) {
 		item->init(renderer);
 	}
