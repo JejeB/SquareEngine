@@ -16,7 +16,7 @@ void Sq::Scene::init(SDL_Renderer* renderer) {
 }
 
 
-void Scene::add_item( Rectangle * r) {
+void Scene::add_item(Rectangle* r) {
 	_items.push_back(r);
 }
 

@@ -49,7 +49,7 @@ namespace Sq {
 		* \brief Get the top corner of the rectangle
 		*
 		*/
-		const Vector get_pos() { return _pos; }
+		const Vector get_pos()const { return _pos; }
 
 		/*!
 		*\brief Set the rectangle to a new position
@@ -73,17 +73,26 @@ namespace Sq {
 		*\brief Get the wanted velocity of the rectangle
 		*
 		*/
-		const Vector get_velocity() { return _velocity; }
+		const Vector get_velocity() const{ return _velocity; }
 
 		/*!
 		*\brief Set the wanted velocity
 		*
 		*/
 		void set_velocity(Vector velocity);
-
-		Vector get_contact_point() { return _contact_point; }
-
-		void add_sprite(const std::string path) { _sprite_path = path; }
+		/*!
+		*\brief get the last contact point with another rectangle
+		* 
+		* \return vector of the contact point in the scene coordinates 
+		*/
+		const Vector get_contact_point() const{ return _contact_point; }
+		
+		/*!
+		* \brief Add a image for the rectangle
+		* 
+		* \parm path : std::string of the path where the image is located
+		*/
+		void add_sprite(const std::string& path) { _sprite_path = path; }
 
 		/*!
 		*\brief Call before the game loop
@@ -127,7 +136,7 @@ namespace Sq {
 	private:
 		void update_rect();
 		void check_collision(float dT);
-		void rigid_body_collision_resolve(float dT, const std::map<float, Rectangle*> collisions);
-		void on_collision(std::map<float, Rectangle*> collisions);
+		void rigid_body_collision_resolve(float dT, const std::map<float, Rectangle*>& collisions);
+		void on_collision(std::map<float, Rectangle*>& collisions);
 	};
 }

@@ -77,7 +77,7 @@ void Rectangle::check_collision(float dT) {
 	}
 }
 
-void Rectangle::rigid_body_collision_resolve(float dT, const std::map<float, Rectangle*> collisions) {
+void Rectangle::rigid_body_collision_resolve(float dT, const std::map<float, Rectangle*>& collisions) {
 	//Resolve collision test again to check if is still in collision with another rectangle
 	for (const auto it : collisions) {
 		Vector normal;
@@ -88,7 +88,7 @@ void Rectangle::rigid_body_collision_resolve(float dT, const std::map<float, Rec
 	}
 }
 
-void Rectangle::on_collision(std::map<float, Sq::Rectangle*> collisions){
+void Rectangle::on_collision(std::map<float, Sq::Rectangle*>& collisions){
 
 }
 
