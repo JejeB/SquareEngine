@@ -3,13 +3,8 @@
 #include <cstdlib>
 #include <time.h>
 
-SquareEngine::SquareEngine(int w, int h): _width(w),_height(h) {
-    _pWindow = NULL;
-    _pRenderer = NULL;
-    _scene = NULL;
-    _isOpen = true;
-    _events.type = 0;
-}
+SquareEngine::SquareEngine(int w, int h): _width(w),_height(h),_pWindow(nullptr),_pRenderer(nullptr),_events(),_isOpen(true),_scene(nullptr),_last_update(),_mouse_pos() 
+{}
 
 int SquareEngine::game_init() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)

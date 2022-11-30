@@ -4,9 +4,8 @@
 
 #include "Rectangle.h"
 
-Scene::Scene():_debug(false){
-	_origin.x = 0; _origin.y = 0;
-}
+Scene::Scene():_origin(Vector{0,0}),_items(), _debug(false) 
+{}
 
 void Scene::init(SDL_Renderer* renderer) {
 	for (Rectangle* item : _items) {

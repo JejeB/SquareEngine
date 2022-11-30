@@ -32,15 +32,17 @@ class Rectangle
 	const Scene * _scene; /*!< Pointer to the scene where the rectangle is in*/
 
 	bool _is_affected_by_gravity; /* !< If true the object is affected to gravity*/
-	const float GRAV = 9.8; /* !< Gravity constant */
-	const float MAX_DROP = 500; /* !< Max y speed gravity*/
+	const float GRAV = (float)9.8; /* !< Gravity constant */
+	const float MAX_DROP = (float)500; /* !< Max y speed gravity*/
 
 	std::string _sprite_path; /* !< Path of the sprite to display*/
 	SDL_Texture * _sprite;  /*!< Data of the sprite texture*/
 
 public:
+	Rectangle(const Scene* scene, float x, float y, int w, int h, Color c, std::string sprite_path);
+	Rectangle(const Scene* scene, float x, float y, int w, int h, std::string sprite_path);
 	Rectangle(const Scene* scene, float x, float y, int w, int h, Color c);
-	Rectangle(const Scene * scene, Vector pos, int w, int h);
+	Rectangle(const Scene* scene, float x, float y, int w, int h);
 
 	/*!
 	* \brief Get the top corner of the rectangle

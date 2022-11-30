@@ -7,19 +7,21 @@
 #include "Scene.h"
 
 
-Rectangle::Rectangle(const Scene* scene, Vector pos, int w, int h) :_pos(pos), _width(w), _height(h) {
-	_scene = scene;
-}
+Rectangle::Rectangle(const Scene* scene, float x, float y, int w, int h, Color c,std::string sprite_path):_pos(Vector{x,y}), _width(w), _height(h), _color(c),_rect_dis(),_instant_velocity(Vector{0,0}),
+_velocity(Vector{ 0,0 }), _contact_point(Vector{0,0}), _scene(scene), _is_affected_by_gravity(false), _sprite_path(sprite_path),_sprite(nullptr)
+{}
 
-Rectangle::Rectangle(const Scene* scene, float x, float y, int w, int h, Color c):_width(w),_height(h),_color(c) {
-	_pos.x = x; _pos.y = y;
-	_velocity.x = 0; _velocity.y=0;
-	_contact_point.x = 0; _contact_point.y = 0;
-	_scene = scene;
-	_is_affected_by_gravity = false;
-	_sprite_path.clear();
-	_sprite = NULL;
-}
+Rectangle::Rectangle(const Scene* scene, float x, float y, int w, int h) :_pos(Vector{ x,y }), _width(w), _height(h), _color(Color{0,0,0}), _rect_dis(), _instant_velocity(Vector{ 0,0 }),
+_velocity(Vector{ 0,0 }), _contact_point(Vector{ 0,0 }), _scene(scene), _is_affected_by_gravity(false), _sprite_path(""), _sprite(nullptr)
+{}
+
+Rectangle::Rectangle(const Scene* scene, float x, float y, int w, int h, std::string sprite_path) :_pos(Vector{ x,y }), _width(w), _height(h), _color(Color{ 0,0,0 }), _rect_dis(), _instant_velocity(Vector{ 0,0 }),
+_velocity(Vector{ 0,0 }), _contact_point(Vector{ 0,0 }), _scene(scene), _is_affected_by_gravity(false), _sprite_path(sprite_path), _sprite(nullptr)
+{}
+
+Rectangle::Rectangle(const Scene* scene, float x, float y, int w, int h, Color c) :_pos(Vector{ x,y }), _width(w), _height(h), _color(c), _rect_dis(), _instant_velocity(Vector{ 0,0 }),
+_velocity(Vector{ 0,0 }), _contact_point(Vector{ 0,0 }), _scene(scene), _is_affected_by_gravity(false), _sprite_path(""), _sprite(nullptr)
+{}
 
 void Rectangle::init(SDL_Renderer* renderer){
 	if (!_sprite_path.empty()) {
@@ -92,7 +94,9 @@ void Rectangle::on_collision(std::map<float, Rectangle*> collisions){
 bool Rectangle::ray_collision(Vector r_origin,Vector r_vec, int width_target, int height_target,Vector &normal) {
 	
 	Vector exp_pos{ _pos.x - width_target ,_pos.y - height_target };
-	Vector exp_size; exp_size.x = _width + width_target; exp_size.y = _height + height_target;
+	Vector exp_size; 
+	exp_size.x = (float)(_width + width_target); 
+	exp_size.y = (float)(_height + height_target);
 	Vector dist = r_vec- r_origin;
 	
 	Vector t_near = (exp_pos - r_origin) / dist;
