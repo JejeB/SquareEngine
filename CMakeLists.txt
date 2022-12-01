@@ -14,11 +14,11 @@ set (SRCS	Main.cpp
 			Scene.cpp
 			SquareEngine.cpp)
 
-set (HEADERS	Rectangle.h
-				Scene.h
-				SquareEngine.h
-				utils/Color.h
-				utils/Vector.h)
+set (HEADERS	Rectangle.hpp
+				Scene.hpp
+				SquareEngine.hpp
+				utils/Color.hpp
+				utils/Vector.hpp)
 
 add_executable(SquareEngine ${SRCS} ${HEADERS} ${SDL} ${SDL_SRC})
 target_link_libraries(SquareEngine ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})

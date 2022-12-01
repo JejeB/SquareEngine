@@ -3,8 +3,8 @@
 #include <math.h>
 #include <map>
 
-#include "Rectangle.h"
-#include "Scene.h"
+#include "Rectangle.hpp"
+#include "Scene.hpp"
 
 using namespace Sq;
 

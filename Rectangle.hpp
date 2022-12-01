@@ -1,6 +1,6 @@
 #pragma once
-#include"utils/Vector.h"
-#include "utils/Color.h"
+#include"utils/Vector.hpp"
+#include "utils/Color.hpp"
 #include "SDL.h"
 #include "SDL_image.h"
 #include <string>

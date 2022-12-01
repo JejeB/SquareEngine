@@ -1,8 +1,8 @@
-#include "Scene.h"
+#include "Scene.hpp"
 
 #include "SDL.h"
 
-#include "Rectangle.h"
+#include "Rectangle.hpp"
 
 using namespace Sq;
 

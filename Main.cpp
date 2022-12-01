@@ -3,10 +3,10 @@
 #include <time.h>
 #include "SDL.h"
 
-#include "SquareEngine.h"
-#include "Scene.h"
-#include "Rectangle.h"
-#include "utils/Vector.h"
+#include "SquareEngine.hpp"
+#include "Scene.hpp"
+#include "Rectangle.hpp"
+#include "utils/Vector.hpp"
 
 int main(int argc, char* argv[])
 {

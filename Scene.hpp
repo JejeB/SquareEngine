@@ -2,9 +2,9 @@
 #include <SDL.h>
 #include <vector>
 
-#include "utils/Vector.h"
+#include "utils/Vector.hpp"
 
-#include "Rectangle.h"
+#include "Rectangle.hpp"
 
 namespace Sq {
 

@@ -1,6 +1,6 @@
 #pragma once
 #include"SDL.h"
-#include "Scene.h"
+#include "Scene.hpp"
 
 namespace Sq {
 
