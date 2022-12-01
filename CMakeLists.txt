@@ -23,6 +23,3 @@ set (HEADERS	Rectangle.hpp
 
 add_executable(SquareEngine ${SRCS} ${HEADERS} ${SDL} ${SDL_SRC})
 target_link_libraries(SquareEngine ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
-
-add_executable(tests tests/test.cpp)
-target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
