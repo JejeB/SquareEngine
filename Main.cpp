@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 
     Sq::Scene s;
     s.set_debug();
-    s.set_origin(Vector{0,0 });
+    s.set_origin(Vector{100,100 });
     sq.set_Scene(&s);
 
     Sq::Rectangle player(&s,500,0,30,30,Color{255,0,255});

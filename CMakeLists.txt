@@ -6,19 +6,24 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
+find_package(Catch2 3 REQUIRED)
+
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
 
 set (SRCS	Main.cpp
-			Rectangle.cpp
-			Scene.cpp
-			SquareEngine.cpp)
+		Rectangle.cpp
+		Scene.cpp
+		SquareEngine.cpp)
 
 set (HEADERS	Rectangle.hpp
-				Scene.hpp
-				SquareEngine.hpp
-				utils/Color.hpp
-				utils/Vector.hpp)
+		Scene.hpp
+		SquareEngine.hpp
+		utils/Color.hpp
+		utils/Vector.hpp)
 
 add_executable(SquareEngine ${SRCS} ${HEADERS} ${SDL} ${SDL_SRC})
 target_link_libraries(SquareEngine ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
+
+add_executable(tests tests/test.cpp)
+target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
