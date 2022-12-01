@@ -19,7 +19,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-
+    
+    - name: Install aptitude
+      run: sudo apt-get install aptitude -y
+      
+    - name: Install SDL
+      run: sudo aptitude install libsdl2-dev -y
+    
+    - name: Install SDL-image
+      run: sudo aptitude install libsdl2-image-dev -y
+  
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
