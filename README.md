@@ -135,3 +135,10 @@ You can use the cmake-gui to generate a Visual Studio Solution. Often it doesn't
 - Link SDL2_IMAGE_INCLUDE_LIBRARY to `{Where you extract the libs}/SDL2_image-2.6.2/lib/x64/SDL2_image.lib`
 
 The click `Configure` then `Generate`. After that if everything work you can `Open Project`. 
+
+Sometime Visual Studio create useless project `ALL_BUILD` and `ZERO_CHECK`, you can just right click and unload them.
+
+When you try to run the prject iyt will say that there are missing the `.dll`, you can find them in the `lib\x64\` folder of the `SDL2` and `SDL2_image library` 
+
+
+ 
