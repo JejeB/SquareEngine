@@ -1,5 +1,4 @@
 #include "SquareEngine.hpp"
-#include "SDL.h"
 #include <cstdlib>
 #include <time.h>
 
