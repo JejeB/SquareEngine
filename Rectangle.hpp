@@ -16,19 +16,19 @@ namespace Sq {
 	 *	The posibilities are : add a velocity, collision detection, rigidbody colliosions resolution, sprite display and gravity. Your are free to use them all or combine them as you like.
 	 *
 	 */
-
 	class Rectangle
 	{
+		SDL_Rect _rect_dis; /* !< SDL_Rect used to display the rect. He's mapped on the scene coord*/
+		Vector _instant_velocity; /* !< Velocity used after colliosion correction*/
+		Vector _contact_point; /*!< Last collions dectection contact point used for debug */
+
+	protected:
 		Vector _pos; /*!<  Top left corner of the rectangle*/
 		int _width; /* !< Size on the horizontal axis*/
 		int _height; /* !< Size on the vertical axis*/
 
 		Color _color; /* !< Color to display the border of the rect*/
-		SDL_Rect _rect_dis; /* !< SDL_Rect used to display the rect. He's mapped on the scene coord*/
-
-		Vector _instant_velocity; /* !< Velocity used after colliosion correction*/
 		Vector _velocity; /*!< Initial velocity asked by the client*/
-		Vector _contact_point; /*!< Last collions dectection contact point used for debug */
 
 		const Scene* _scene; /*!< Pointer to the scene where the rectangle is in*/
 
@@ -106,7 +106,7 @@ namespace Sq {
 		*  This method do all the computation that are needed for the the rectangle, like new posiiton after speed collioisions ect...
 		*  \param dT: delta since the last call of the funciton
 		*/
-		void update(float dT);
+		virtual void update(float dT);
 		/*!
 		*\brief Call at the end of the game loop
 		*
@@ -130,7 +130,7 @@ namespace Sq {
 		*/
 		void add_gravity() { _is_affected_by_gravity = true; }
 
-		void event(SDL_Event _event);
+		virtual void event(SDL_Event _event);
 
 
 	private:
