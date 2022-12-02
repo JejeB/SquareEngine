@@ -1,7 +1,4 @@
 #include "Scene.hpp"
-
-#include "SDL.h"
-
 #include "Rectangle.hpp"
 
 using namespace Sq;
