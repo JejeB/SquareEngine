@@ -19,8 +19,10 @@ namespace Sq {
 	class Rectangle
 	{
 		SDL_Rect _rect_dis; /* !< SDL_Rect used to display the rect. He's mapped on the scene coord*/
-		Vector _instant_velocity; /* !< Velocity used after colliosion correction*/
+		Vector _velocity; /*!< Initial velocity asked by the client*/
+		Vector _wanted_velocity; /* !< Velocity used after colliosion correction*/
 		Vector _contact_point; /*!< Last collions dectection contact point used for debug */
+		std::map<float, Rectangle*> _collision_rects;
 
 	protected:
 		Vector _pos; /*!<  Top left corner of the rectangle*/
@@ -28,13 +30,14 @@ namespace Sq {
 		int _height; /* !< Size on the vertical axis*/
 
 		Color _color; /* !< Color to display the border of the rect*/
-		Vector _velocity; /*!< Initial velocity asked by the client*/
+		
 
 		const Scene* _scene; /*!< Pointer to the scene where the rectangle is in*/
 
 		bool _is_affected_by_gravity; /* !< If true the object is affected to gravity*/
+		bool _is_rigid; /* !< If true the object is affected for collisions*/
 		const float GRAV = (float)9.8; /* !< Gravity constant */
-		const float MAX_DROP = (float)500; /* !< Max y speed gravity*/
+		const float MAX_DROP = (float)2000; /* !< Max y speed gravity*/
 
 		std::string _sprite_path; /* !< Path of the sprite to display*/
 		SDL_Texture* _sprite;  /*!< Data of the sprite texture*/
@@ -80,6 +83,17 @@ namespace Sq {
 		*
 		*/
 		void set_velocity(Vector velocity);
+		/*\brief Setr the wanted x velocity
+		* 
+		*/
+		
+		void set_velocity_x(float x) { _wanted_velocity.x = x; }
+
+		/*\brief Setr the wanted y velocity
+		*
+		*/
+
+		void set_velocity_y(float y) { _wanted_velocity.y = y; }
 		/*!
 		*\brief get the last contact point with another rectangle
 		* 
@@ -140,7 +154,8 @@ namespace Sq {
 	private:
 		void update_rect();
 		void check_collision(float dT);
-		void rigid_body_collision_resolve(float dT, const std::map<float, Rectangle*>& collisions);
-		void on_collision(std::map<float, Rectangle*>& collisions);
+		void on_collision();
+		const Vector rigid_body_collision_resolve(float dT, const std::map<float, Rectangle*>& collisions);
+		const Vector compute_gravity();
 	};
 }

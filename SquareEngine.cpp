@@ -26,7 +26,7 @@ int SquareEngine::game_init() {
     return EXIT_SUCCESS;
 }
 
-void SquareEngine::game_loop() {
+void SquareEngine::game_update() {
     manage_events();
     //Draw background
     
@@ -36,12 +36,14 @@ void SquareEngine::game_loop() {
     Uint32 time = SDL_GetTicks();
     float dT = (time - _last_update) / 1000.0f;
     if (_scene != NULL) {
-        //Update
         _scene->update(dT);
         _last_update = time;
-        //Draw
-        _scene->draw(_pRenderer);
+    }
 }
+
+void SquareEngine::game_frame_renderer() {
+    if(_scene!=NULL)
+        _scene->draw(_pRenderer);
     SDL_RenderPresent(_pRenderer);
 }
 

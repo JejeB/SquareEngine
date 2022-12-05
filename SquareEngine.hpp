@@ -56,12 +56,15 @@ namespace Sq {
 		*
 		* This function wile compute all the object interaction and draw them, you need to call it at the end of the while loop
 		*/
-		void game_loop();
+		void game_update();
+
+		void game_frame_renderer();
 		/* \brief call after the while loop
 		*
 		*This function will close the game and free all the memory
 		*/
 		void game_close();
+
 	private:
 		void manage_events();
 	};

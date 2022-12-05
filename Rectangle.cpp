@@ -8,20 +8,20 @@
 
 using namespace Sq;
 
-Rectangle::Rectangle(const Scene* scene, float x, float y, int w, int h, Color c,std::string sprite_path):_pos(Vector{x,y}), _width(w), _height(h), _color(c),_rect_dis(),_instant_velocity(Vector{0,0}),
-_velocity(Vector{ 0,0 }), _contact_point(Vector{0,0}), _scene(scene), _is_affected_by_gravity(false), _sprite_path(sprite_path),_sprite(nullptr)
+Rectangle::Rectangle(const Scene* scene, float x, float y, int w, int h, Color c,std::string sprite_path):_pos(Vector{x,y}), _width(w), _height(h), _color(c),_rect_dis(),_velocity(Vector{0,0}),
+_wanted_velocity(Vector{ 0,0 }), _contact_point(Vector{0,0}), _scene(scene), _is_affected_by_gravity(false), _sprite_path(sprite_path),_sprite(nullptr)
 {}
 
-Rectangle::Rectangle(const Scene* scene, float x, float y, int w, int h) :_pos(Vector{ x,y }), _width(w), _height(h), _color(Color{0,0,0}), _rect_dis(), _instant_velocity(Vector{ 0,0 }),
-_velocity(Vector{ 0,0 }), _contact_point(Vector{ 0,0 }), _scene(scene), _is_affected_by_gravity(false), _sprite_path(""), _sprite(nullptr)
+Rectangle::Rectangle(const Scene* scene, float x, float y, int w, int h) :_pos(Vector{ x,y }), _width(w), _height(h), _color(Color{0,0,0}), _rect_dis(), _velocity(Vector{ 0,0 }),
+_wanted_velocity(Vector{ 0,0 }), _contact_point(Vector{ 0,0 }), _scene(scene), _is_affected_by_gravity(false), _sprite_path(""), _sprite(nullptr)
 {}
 
-Rectangle::Rectangle(const Scene* scene, float x, float y, int w, int h, std::string sprite_path) :_pos(Vector{ x,y }), _width(w), _height(h), _color(Color{ 0,0,0 }), _rect_dis(), _instant_velocity(Vector{ 0,0 }),
-_velocity(Vector{ 0,0 }), _contact_point(Vector{ 0,0 }), _scene(scene), _is_affected_by_gravity(false), _sprite_path(sprite_path), _sprite(nullptr)
+Rectangle::Rectangle(const Scene* scene, float x, float y, int w, int h, std::string sprite_path) :_pos(Vector{ x,y }), _width(w), _height(h), _color(Color{ 0,0,0 }), _rect_dis(), _velocity(Vector{ 0,0 }),
+_wanted_velocity(Vector{ 0,0 }), _contact_point(Vector{ 0,0 }), _scene(scene), _is_affected_by_gravity(false), _sprite_path(sprite_path), _sprite(nullptr)
 {}
 
-Rectangle::Rectangle(const Scene* scene, float x, float y, int w, int h, Color c) :_pos(Vector{ x,y }), _width(w), _height(h), _color(c), _rect_dis(), _instant_velocity(Vector{ 0,0 }),
-_velocity(Vector{ 0,0 }), _contact_point(Vector{ 0,0 }), _scene(scene), _is_affected_by_gravity(false), _sprite_path(""), _sprite(nullptr)
+Rectangle::Rectangle(const Scene* scene, float x, float y, int w, int h, Color c) :_pos(Vector{ x,y }), _width(w), _height(h), _color(c), _rect_dis(), _velocity(Vector{ 0,0 }),
+_wanted_velocity(Vector{ 0,0 }), _contact_point(Vector{ 0,0 }), _scene(scene), _is_affected_by_gravity(false), _sprite_path(""), _sprite(nullptr)
 {}
 
 void Rectangle::init(SDL_Renderer* renderer){
@@ -37,7 +37,7 @@ std::map<int, bool> Rectangle::get_keys()  {
 }
 
 void Rectangle::set_velocity(Vector v) {
-	_velocity = v;
+	_wanted_velocity = v;
 }
 void Rectangle::update_rect() {
 	if (_scene != NULL) {
@@ -53,46 +53,61 @@ void Rectangle::update_rect() {
 }
 
 void Rectangle::update(float dT) {
-	if (_is_affected_by_gravity) {
-		_velocity.y = GRAV + _velocity.y;
-		_velocity.y = _velocity.y > MAX_DROP ? MAX_DROP : _velocity.y;
-	}
-	_instant_velocity = _velocity;
+	Vector gravity{ 0,0 };
+	Vector collisions{ 0,0 };
+	//Gravity
+	if (_is_affected_by_gravity && _wanted_velocity.y==0)
+		gravity = compute_gravity();
+	_velocity = _wanted_velocity + gravity;
 
+	//Collionsions
 	check_collision(dT);
-	_pos = _pos+ _instant_velocity.by(dT);
+
+	//Correction collisions
+	if (_is_rigid)
+		collisions=rigid_body_collision_resolve(dT, _collision_rects);
+	_velocity = _velocity + collisions;
+
+	//Position update
+	_pos = _pos+ _velocity.by(dT);
+}
+
+const Vector Rectangle::compute_gravity() {
+	Vector r{ 0,0 };
+	r.y = GRAV + _velocity.y;
+	r.y = _velocity.y > MAX_DROP ? MAX_DROP : r.y;
+	return r;
 }
 
 void Rectangle::check_collision(float dT) {
-	std::map<float, Rectangle*> collisions;
-	
+	_collision_rects.clear();
 	for (const auto r : _scene->get_items()) {
 		Vector n;
 		if (r != this) {
-			if (r->ray_collision(_pos, _pos + _instant_velocity.by(dT),_width,_height,n)) {
+			if (r->ray_collision(_pos, _pos + _velocity.by(dT),_width,_height,n)) {
 				const float dist = _pos.dist(r->get_contact_point());
-				collisions[dist] = r; //Add the distance the the colliosion map, so the map is sorted by distance of collionsion
+				_collision_rects[dist] = r; //Add the distance the the colliosion map, so the map is sorted by distance of collionsion
 			}
 		}
 	}
-	if (collisions.size() != 0) {
-		on_collision(collisions);
-		rigid_body_collision_resolve(dT,collisions);
+	if (_collision_rects.size() != 0) {
+		on_collision();
 	}
 }
 
-void Rectangle::rigid_body_collision_resolve(float dT, const std::map<float, Rectangle*>& collisions) {
+const Vector Rectangle::rigid_body_collision_resolve(float dT, const std::map<float, Rectangle*>& collisions) {
+	Vector correction{ 0,0 };
 	//Resolve collision test again to check if is still in collision with another rectangle
 	for (const auto it : collisions) {
 		Vector normal;
-		if (it.second->ray_collision(_pos, _pos + _instant_velocity.by(dT), _width, _height, normal)) {
-			Vector correction = _instant_velocity.abs() * normal;
-			_instant_velocity = _instant_velocity + correction;
+		if (it.second->ray_collision(_pos, _pos + _velocity.by(dT), _width, _height, normal)) {
+			 correction =correction+ _velocity.abs() * normal;
 		}
 	}
+	return correction;
 }
 
-void Rectangle::on_collision(std::map<float, Sq::Rectangle*>& collisions){
+void Rectangle::on_collision(){
 
 }
 
