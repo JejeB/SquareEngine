@@ -56,6 +56,7 @@ namespace Sq {
 		*This function will close the game and free all the memory
 		*/
 		void game_close();
+	private:
+		void manage_events();
 	};
 }
-

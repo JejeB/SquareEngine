@@ -23,11 +23,7 @@ void Scene::update(float dT) {
 	}
 }
 
-void Scene::event(SDL_Event _event) {
-	for (Rectangle* item : _items) {
 
-	}
-}
 
 void Scene::draw(SDL_Renderer * renderer) {
 	if (_debug) {

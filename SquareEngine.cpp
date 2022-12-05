@@ -27,38 +27,51 @@ int SquareEngine::game_init() {
 }
 
 void SquareEngine::game_loop() {
-    int x; int y;
-        while (SDL_PollEvent(&_events))
-        {
-            switch (_events.type)
-            {
-            case SDL_QUIT:
-                _isOpen = false;
-                break;
-            }
+    manage_events();
+    //Draw background
+    SDL_SetRenderDrawColor(_pRenderer, 0, 0, 0, 255);
+    SDL_RenderClear(_pRenderer);
 
-            
-        }
-        SDL_PumpEvents();
-        SDL_GetMouseState(&x, &y);
-        _mouse_pos.x = (float)x;
-        _mouse_pos.y = (float)y;
-        SDL_SetRenderDrawColor(_pRenderer, 0, 0, 0, 255);
-        SDL_RenderClear(_pRenderer);
-
-        Uint32 time = SDL_GetTicks();
-        float dT = (time - _last_update) / 1000.0f;
-        if (_scene != NULL) {
-            //Update
-            _scene->update(dT);
-            _last_update = time;
-            //Draw
-            _scene->draw(_pRenderer);
-        }
-
-        SDL_RenderPresent(_pRenderer);
+    Uint32 time = SDL_GetTicks();
+    float dT = (time - _last_update) / 1000.0f;
+    if (_scene != NULL) {
+        //Update
+        _scene->update(dT);
+        _last_update = time;
+        //Draw
+        _scene->draw(_pRenderer);
+}
+    SDL_RenderPresent(_pRenderer);
 }
 
+void SquareEngine::manage_events() {
+    int x; int y;
+    while (SDL_PollEvent(&_events))
+    {
+        switch (_events.type)
+        {
+        case SDL_QUIT:
+            _isOpen = false;
+            break;
+        case SDL_KEYDOWN:
+            SDL_Log("%d", _events.key.keysym.sym);
+            break;
+        case SDL_KEYUP:
+            SDL_Log("%d", _events.key.keysym.sym);
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            SDL_Log("Mouse Down");
+            break;
+        case SDL_MOUSEBUTTONUP:
+            SDL_Log("Mouse Up");
+            break;
+        }
+    }
+    SDL_PumpEvents();
+    SDL_GetMouseState(&x, &y);
+    _mouse_pos.x = (float)x;
+    _mouse_pos.y = (float)y;
+}
 void SquareEngine::game_close() {
     SDL_Log("close");
     SDL_DestroyRenderer(_pRenderer); 

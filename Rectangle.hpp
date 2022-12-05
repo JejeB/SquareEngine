@@ -130,8 +130,6 @@ namespace Sq {
 		*/
 		void add_gravity() { _is_affected_by_gravity = true; }
 
-		virtual void event(SDL_Event _event);
-
 
 	private:
 		void update_rect();
