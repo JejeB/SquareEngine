@@ -53,6 +53,10 @@ namespace Sq {
 
 	private:
 		void draw_debug(SDL_Renderer* renderer);
+		void compute_rects_velocities(float dT);
+		void detect_collisions(float dT);
+		void resolve_collisions(float dT);
+		void updates_positons(float dT);
 	};
 }
 

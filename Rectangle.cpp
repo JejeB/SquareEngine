@@ -40,6 +40,7 @@ void Rectangle::set_velocity(Vector v) {
 	_wanted_velocity = v;
 }
 void Rectangle::update_rect() {
+
 	if (_scene != NULL) {
 		_rect_dis.x = (int)(_scene->get_origin().x + _pos.x);
 		_rect_dis.y = (int)(_scene->get_origin().y + _pos.y);
@@ -53,23 +54,20 @@ void Rectangle::update_rect() {
 }
 
 void Rectangle::update(float dT) {
+}
+
+void Rectangle::compute_velocity(float dT) {
 	Vector gravity{ 0,0 };
-	Vector collisions{ 0,0 };
-	//Gravity
-	if (_is_affected_by_gravity && _wanted_velocity.y==0)
+	if (_is_affected_by_gravity && _wanted_velocity.y == 0)
 		gravity = compute_gravity();
 	_velocity = _wanted_velocity + gravity;
+}
 
-	//Collionsions
-	check_collision(dT);
-
-	//Correction collisions
+void Rectangle::resolve_collision(float dT) {
+	Vector collisions{ 0,0 };
 	if (_is_rigid)
-		collisions=rigid_body_collision_resolve(dT, _collision_rects);
+		collisions = rigid_body_collision_resolve(dT, _collision_rects);
 	_velocity = _velocity + collisions;
-
-	//Position update
-	_pos = _pos+ _velocity.by(dT);
 }
 
 const Vector Rectangle::compute_gravity() {
@@ -81,6 +79,7 @@ const Vector Rectangle::compute_gravity() {
 
 void Rectangle::check_collision(float dT) {
 	_collision_rects.clear();
+	_on_collisions = false;
 	for (const auto r : _scene->get_items()) {
 		Vector n;
 		if (r != this) {
@@ -92,9 +91,13 @@ void Rectangle::check_collision(float dT) {
 	}
 	if (_collision_rects.size() != 0) {
 		on_collision();
+		_on_collisions = true;
 	}
 }
 
+void Rectangle::update_positon(float dT) {
+	_pos = _pos + _velocity.by(dT);
+}
 const Vector Rectangle::rigid_body_collision_resolve(float dT, const std::map<float, Rectangle*>& collisions) {
 	Vector correction{ 0,0 };
 	//Resolve collision test again to check if is still in collision with another rectangle

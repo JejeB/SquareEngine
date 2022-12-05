@@ -35,7 +35,8 @@ namespace Sq {
 		const Scene* _scene; /*!< Pointer to the scene where the rectangle is in*/
 
 		bool _is_affected_by_gravity; /* !< If true the object is affected to gravity*/
-		bool _is_rigid; /* !< If true the object is affected for collisions*/
+		bool _is_rigid=false; /* !< If true the object is affected for collisions*/
+		bool _on_collisions=false;
 		const float GRAV = (float)9.8; /* !< Gravity constant */
 		const float MAX_DROP = (float)2000; /* !< Max y speed gravity*/
 
@@ -144,16 +145,23 @@ namespace Sq {
 		*/
 		void add_gravity() { _is_affected_by_gravity = true; }
 
+		void add_rigid() { _is_rigid = true; }
+
 		/*\brief get list of key in the scene
 		*
 		* \return Map where the key is the key pressed and true if the key is down else false
 		*/
 		std::map<int, bool> get_keys();
 
+		void compute_velocity(float dT);
+		void check_collision(float dT);
+		void resolve_collision(float dT);
+		void update_positon(float dT);
+
 
 	private:
 		void update_rect();
-		void check_collision(float dT);
+		
 		void on_collision();
 		const Vector rigid_body_collision_resolve(float dT, const std::map<float, Rectangle*>& collisions);
 		const Vector compute_gravity();

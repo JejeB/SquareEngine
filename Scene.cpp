@@ -19,8 +19,36 @@ void Scene::add_item(Rectangle* r) {
 }
 
 void Scene::update(float dT) {
-	for (Rectangle *item : _items) {
+	for (Rectangle* item : _items) {
 		item->update(dT);
+	}
+	compute_rects_velocities(dT);
+	detect_collisions(dT);
+	resolve_collisions(dT);
+	updates_positons(dT);
+}
+
+void Scene::compute_rects_velocities(float dT) {
+	for (Rectangle* item : _items) {
+		item->compute_velocity(dT);
+	}
+}
+
+void Scene::detect_collisions(float dT) {
+	for (Rectangle* item : _items) {
+		item->check_collision(dT);
+	}
+}
+
+void Scene::resolve_collisions(float dT) {
+	for (Rectangle* item : _items) {
+		item->resolve_collision(dT);
+	}
+}
+
+void Scene::updates_positons(float dT) {
+	for (Rectangle* item : _items) {
+		item->update_positon(dT);
 	}
 }
 
