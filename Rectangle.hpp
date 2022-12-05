@@ -130,6 +130,12 @@ namespace Sq {
 		*/
 		void add_gravity() { _is_affected_by_gravity = true; }
 
+		/*\brief get list of key in the scene
+		*
+		* \return Map where the key is the key pressed and true if the key is down else false
+		*/
+		std::map<int, bool> get_keys();
+
 
 	private:
 		void update_rect();

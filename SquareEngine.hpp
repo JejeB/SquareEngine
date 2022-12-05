@@ -15,6 +15,7 @@ namespace Sq {
 		Scene* _scene; /*Scene that will be display*/
 		Uint32 _last_update; /* Used to compute the time between two frame*/
 		Vector _mouse_pos; /* Mouse postions in the window coordinate*/
+		std::map<int, bool> _keys;
 
 	public:
 		/* \brief Main class of the Engine
@@ -39,6 +40,11 @@ namespace Sq {
 		* \return Vector of the mouse position in the window coordinate
 		*/
 		Vector mouse_pos() { return _mouse_pos; }
+		/* \brief Get the key pressed at the moment
+		* 
+		* \return Map where the key is the key pressed and true if the key is down else false
+		*/
+		std::map<int, bool> get_keys() const { return _keys; }
 
 		/*\brief call before the while loop
 		*

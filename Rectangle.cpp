@@ -32,6 +32,10 @@ void Rectangle::init(SDL_Renderer* renderer){
 	}
 }
 
+std::map<int, bool> Rectangle::get_keys()  {
+	return _scene->get_keys(); 
+}
+
 void Rectangle::set_velocity(Vector v) {
 	_velocity = v;
 }

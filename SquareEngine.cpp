@@ -29,6 +29,7 @@ int SquareEngine::game_init() {
 void SquareEngine::game_loop() {
     manage_events();
     //Draw background
+    
     SDL_SetRenderDrawColor(_pRenderer, 0, 0, 0, 255);
     SDL_RenderClear(_pRenderer);
 
@@ -46,6 +47,7 @@ void SquareEngine::game_loop() {
 
 void SquareEngine::manage_events() {
     int x; int y;
+    
     while (SDL_PollEvent(&_events))
     {
         switch (_events.type)
@@ -54,26 +56,27 @@ void SquareEngine::manage_events() {
             _isOpen = false;
             break;
         case SDL_KEYDOWN:
-            SDL_Log("%d", _events.key.keysym.sym);
+            //SDL_Log("%d", _events.key.keysym.sym);
+            _keys[_events.key.keysym.sym] = true;
             break;
         case SDL_KEYUP:
-            SDL_Log("%d", _events.key.keysym.sym);
+            _keys[_events.key.keysym.sym] = false;
             break;
         case SDL_MOUSEBUTTONDOWN:
-            SDL_Log("Mouse Down");
+            //SDL_Log("Mouse Down");
             break;
         case SDL_MOUSEBUTTONUP:
-            SDL_Log("Mouse Up");
+            //SDL_Log("Mouse Up");
             break;
         }
     }
+    
     SDL_PumpEvents();
     SDL_GetMouseState(&x, &y);
     _mouse_pos.x = (float)x;
     _mouse_pos.y = (float)y;
 }
 void SquareEngine::game_close() {
-    SDL_Log("close");
     SDL_DestroyRenderer(_pRenderer); 
     SDL_DestroyWindow(_pWindow);
     SDL_Quit();

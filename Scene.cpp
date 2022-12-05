@@ -1,9 +1,10 @@
+#include "SquareEngine.hpp"
 #include "Scene.hpp"
 #include "Rectangle.hpp"
 
 using namespace Sq;
 
-Scene::Scene():_origin(Vector{0,0}),_items(), _debug(false) 
+Scene::Scene(SquareEngine* engine):_engine(engine), _origin(Vector{0,0}), _items(), _debug(false)
 {}
 
 void Sq::Scene::init(SDL_Renderer* renderer) {
@@ -23,7 +24,9 @@ void Scene::update(float dT) {
 	}
 }
 
-
+std::map<int, bool> Scene::get_keys() const{
+	return _engine->get_keys();
+}
 
 void Scene::draw(SDL_Renderer * renderer) {
 	if (_debug) {

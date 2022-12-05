@@ -2,11 +2,11 @@
 #include "SDL.h"
 #include <vector>
 
+#include "Rectangle.hpp"
 #include "utils/Vector.hpp"
 
-#include "Rectangle.hpp"
-
 namespace Sq {
+	class SquareEngine;
 
 	/*\brief Scene to display rectangle
 	*
@@ -15,11 +15,12 @@ namespace Sq {
 	*/
 	class Scene
 	{
+		SquareEngine* _engine;
 		Vector _origin;/* Origin of the scene it will be the 0,0 point foir all the rectangles*/
 		std::vector<Rectangle*> _items; /* List of rectangle to display and manage*/
 		bool _debug; /*Boolean to know if the class is in debug mode*/
 	public:
-		Scene();
+		Scene(SquareEngine* engine);
 		void init(SDL_Renderer* renderer);
 		/* \brief return all the items from the scene as readonly
 		*  \return : list of all rectangle in the scene
@@ -40,6 +41,7 @@ namespace Sq {
 		void set_origin(const Vector c) { _origin = c; }
 		Vector get_origin() const { return _origin; }
 
+		std::map<int, bool> get_keys() const;
 
 		Vector map_to_scene(Vector v) { return v - _origin; }
 		Vector map_to_view(Vector v) { return  _origin - v; }
