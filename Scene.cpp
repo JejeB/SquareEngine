@@ -39,6 +39,9 @@ void Scene::detect_collisions() {
 	for (Rectangle* item : _items) {
 		item->check_collision();
 	}
+	for (Rectangle* item : _items) {
+		item->set_collisions();
+	}
 }
 
 void Scene::resolve_collisions() {
@@ -63,6 +66,12 @@ void Scene::draw(SDL_Renderer * renderer) {
 	}
 	for (Rectangle* item : _items) {
 		item->draw(renderer);
+	}
+}
+
+void Scene::clear() {
+	for (Rectangle* item : _items) {
+		item->clear();
 	}
 }
 

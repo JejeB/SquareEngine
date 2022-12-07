@@ -78,17 +78,21 @@ const Vector Rectangle::compute_gravity() {
 }
 
 void Rectangle::check_collision() {
-	_collision_rects.clear();
-	_on_collisions = false;
+	
 	for (const auto r : _scene->get_items()) {
 		Vector n; Vector c; float f;
 		if (r != this) {
 			if (r->ray_collision(_pos, _pos + instant_velo(), _width, _height, n, c,f)) {
 				const float dist = _pos.dist(r->get_contact_point());
+				//SDL_Log("Collisions: %f %f", _pos.y, instant_velo().y);
 				_collision_rects[dist] = r; //Add the distance the the colliosion map, so the map is sorted by distance of collionsion
+				r->add_coll(dist, this);
 			}
 		}
 	}
+}
+
+void Rectangle::set_collisions() {
 	if (_collision_rects.size() != 0) {
 		on_collision();
 		_on_collisions = true;
@@ -156,8 +160,11 @@ bool Rectangle::ray_collision(Vector r_origin,Vector r_vec, int width_target, in
 	return true;
 }
 
+void Rectangle::render(){}
+
 void Rectangle::draw(SDL_Renderer* renderer) {
 	update_rect();
+	render();
 	SDL_SetRenderDrawColor(renderer, _color.r, _color.g, _color.b, 100);
 	SDL_RenderDrawRect(renderer,&_rect_dis);
 
@@ -171,4 +178,9 @@ void Rectangle::draw(SDL_Renderer* renderer) {
 
 Vector Rectangle::instant_velo() {
 	 return _velocity.by(_scene->get_dT());
+}
+
+void Rectangle::clear() {
+	_collision_rects.clear();
+	_on_collisions = false;
 }

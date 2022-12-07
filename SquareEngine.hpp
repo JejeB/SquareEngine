@@ -14,6 +14,7 @@ namespace Sq {
 		bool _isOpen; /* Check if the game is still up*/
 		Scene* _scene; /*Scene that will be display*/
 		Uint32 _last_update; /* Used to compute the time between two frame*/
+		float _delta;
 		Vector _mouse_pos; /* Mouse postions in the window coordinate*/
 		std::map<int, bool> _keys;
 

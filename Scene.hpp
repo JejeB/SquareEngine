@@ -53,6 +53,7 @@ namespace Sq {
 
 		void update(float dT);
 		void draw(SDL_Renderer* renderer);
+		void clear();
 
 	private:
 		void draw_debug(SDL_Renderer* renderer);

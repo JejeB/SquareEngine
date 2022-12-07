@@ -28,8 +28,8 @@ int SquareEngine::game_init() {
 
 void SquareEngine::game_update() {
     Uint32 time = SDL_GetTicks();
-    float delta = (time - _last_update);
-    if (delta > 1000 / fps_cap) {
+    _delta = (time - _last_update);
+    if (_delta > 1000 / fps_cap) {
         manage_events();
         //Draw background
 
@@ -37,18 +37,23 @@ void SquareEngine::game_update() {
         SDL_RenderClear(_pRenderer);
 
 
-        float dT = delta / 1000.0f;
-        if (_scene != NULL) {
+        float dT = _delta / 1000.0f;
+        if (_scene != NULL) 
             _scene->update(dT);
-            _last_update = time;
-        }
+        _last_update = time;
     }
 }
 
 void SquareEngine::game_frame_renderer() {
-    if(_scene!=NULL)
-        _scene->draw(_pRenderer);
-    SDL_RenderPresent(_pRenderer);
+    if (_delta > 1000 / fps_cap) {
+        if (_scene != NULL) {
+            _scene->draw(_pRenderer);
+            _scene->clear();
+        }
+        
+        SDL_RenderPresent(_pRenderer);
+    }
+    
 }
 
 void SquareEngine::manage_events() {

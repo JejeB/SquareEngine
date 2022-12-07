@@ -128,6 +128,7 @@ namespace Sq {
 		* Generate the renderer of the rectangle
 		*\param renderer: SDL_Renderer to be updated
 		*/
+		virtual void render();
 		void draw(SDL_Renderer* renderer);
 
 		/*!
@@ -155,9 +156,12 @@ namespace Sq {
 
 		void compute_velocity();
 		void check_collision();
+		void set_collisions();
 		void resolve_collision();
 		void update_positon();
+		void clear();
 
+		void add_coll(float d, Rectangle* r) { _collision_rects[d] = r; }
 
 	private:
 		void update_rect();
