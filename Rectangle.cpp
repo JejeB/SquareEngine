@@ -53,20 +53,20 @@ void Rectangle::update_rect() {
 	_rect_dis.h = _height;
 }
 
-void Rectangle::update(float dT) {
+void Rectangle::update() {
 }
 
-void Rectangle::compute_velocity(float dT) {
+void Rectangle::compute_velocity() {
 	Vector gravity{ 0,0 };
 	if (_is_affected_by_gravity && _wanted_velocity.y == 0)
 		gravity = compute_gravity();
 	_velocity = _wanted_velocity + gravity;
 }
 
-void Rectangle::resolve_collision(float dT) {
+void Rectangle::resolve_collision() {
 	Vector collisions{ 0,0 };
 	if (_is_rigid)
-		collisions = rigid_body_collision_resolve(dT, _collision_rects);
+		collisions = rigid_body_collision_resolve(_collision_rects);
 	_velocity = _velocity + collisions;
 }
 
@@ -77,13 +77,13 @@ const Vector Rectangle::compute_gravity() {
 	return r;
 }
 
-void Rectangle::check_collision(float dT) {
+void Rectangle::check_collision() {
 	_collision_rects.clear();
 	_on_collisions = false;
 	for (const auto r : _scene->get_items()) {
-		Vector n;
+		Vector n; Vector c; float f;
 		if (r != this) {
-			if (r->ray_collision(_pos, _pos + _velocity.by(dT),_width,_height,n)) {
+			if (r->ray_collision(_pos, _pos + instant_velo(), _width, _height, n, c,f)) {
 				const float dist = _pos.dist(r->get_contact_point());
 				_collision_rects[dist] = r; //Add the distance the the colliosion map, so the map is sorted by distance of collionsion
 			}
@@ -95,16 +95,16 @@ void Rectangle::check_collision(float dT) {
 	}
 }
 
-void Rectangle::update_positon(float dT) {
-	_pos = _pos + _velocity.by(dT);
+void Rectangle::update_positon() {
+	_pos = _pos + instant_velo();
 }
-const Vector Rectangle::rigid_body_collision_resolve(float dT, const std::map<float, Rectangle*>& collisions) {
+const Vector Rectangle::rigid_body_collision_resolve(const std::map<float, Rectangle*>& collisions) {
 	Vector correction{ 0,0 };
 	//Resolve collision test again to check if is still in collision with another rectangle
 	for (const auto it : collisions) {
-		Vector normal;
-		if (it.second->ray_collision(_pos, _pos + _velocity.by(dT), _width, _height, normal)) {
-			 correction =correction+ _velocity.abs() * normal;
+		Vector normal; Vector contact; float f;
+		if (it.second->ray_collision(_pos, _pos + instant_velo(), _width, _height, normal, contact,f)) {
+				correction = correction + (_velocity.abs() * normal).by(1-f);	
 		}
 	}
 	return correction;
@@ -114,7 +114,7 @@ void Rectangle::on_collision(){
 
 }
 
-bool Rectangle::ray_collision(Vector r_origin,Vector r_vec, int width_target, int height_target,Vector &normal) {
+bool Rectangle::ray_collision(Vector r_origin,Vector r_vec, int width_target, int height_target,Vector &normal,Vector &contact_point,float& t_hit_near) {
 	
 	Vector exp_pos{ _pos.x - width_target ,_pos.y - height_target };
 	Vector exp_size; 
@@ -125,8 +125,6 @@ bool Rectangle::ray_collision(Vector r_origin,Vector r_vec, int width_target, in
 	Vector t_near = (exp_pos - r_origin) / dist;
 	Vector t_far = (exp_pos + exp_size - r_origin) / dist;
 
-	
-
 	if (isnan(t_far.y) || isnan(t_far.x)) return false;
 	if (isnan(t_near.y) || isnan(t_near.x)) return false;
 
@@ -135,15 +133,15 @@ bool Rectangle::ray_collision(Vector r_origin,Vector r_vec, int width_target, in
 
 	if (t_near.x > t_far.y || t_near.y > t_far.x) return false;
 
-	float t_hit_near = std::max(t_near.x, t_near.y);
+	t_hit_near = std::max(t_near.x, t_near.y);
 
 	// Furthest 'time' is contact on opposite side of target
 	float t_hit_far = std::min(t_far.x, t_far.y);
 	
-	if (t_hit_far < 0 || t_hit_near>1) return false;
+	if (t_hit_far < 0 || t_hit_near>1 || t_hit_near<0) return false;
 
-	_contact_point.x = r_origin.x + t_hit_near * dist.x;
-	_contact_point.y = r_origin.y + t_hit_near * dist.y;
+	contact_point.x = r_origin.x + t_hit_near * dist.x;
+	contact_point.y = r_origin.y + t_hit_near * dist.y;
 
 	if (t_near.x > t_near.y)
 		if (dist.x < 0)
@@ -155,18 +153,22 @@ bool Rectangle::ray_collision(Vector r_origin,Vector r_vec, int width_target, in
 			normal = { 0, 1 };
 		else
 			normal = { 0, -1 };
-
-	
 	return true;
-
 }
 
 void Rectangle::draw(SDL_Renderer* renderer) {
 	update_rect();
-	SDL_SetRenderDrawColor(renderer, _color.r, _color.g, _color.b, 255);
+	SDL_SetRenderDrawColor(renderer, _color.r, _color.g, _color.b, 100);
 	SDL_RenderDrawRect(renderer,&_rect_dis);
+
+	SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+	SDL_RenderDrawPoint(renderer, _contact_point.x, _contact_point.y);
 
 	if (_sprite != NULL) {
 		SDL_RenderCopy(renderer, _sprite, nullptr, &_rect_dis);
 	}
+}
+
+Vector Rectangle::instant_velo() {
+	 return _velocity.by(_scene->get_dT());
 }

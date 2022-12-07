@@ -37,8 +37,8 @@ namespace Sq {
 		bool _is_affected_by_gravity; /* !< If true the object is affected to gravity*/
 		bool _is_rigid=false; /* !< If true the object is affected for collisions*/
 		bool _on_collisions=false;
-		const float GRAV = (float)9.8; /* !< Gravity constant */
-		const float MAX_DROP = (float)2000; /* !< Max y speed gravity*/
+		const float GRAV = (float)9.8*5; /* !< Gravity constant */
+		const float MAX_DROP = (float)10000; /* !< Max y speed gravity*/
 
 		std::string _sprite_path; /* !< Path of the sprite to display*/
 		SDL_Texture* _sprite;  /*!< Data of the sprite texture*/
@@ -121,7 +121,7 @@ namespace Sq {
 		*  This method do all the computation that are needed for the the rectangle, like new posiiton after speed collioisions ect...
 		*  \param dT: delta since the last call of the funciton
 		*/
-		virtual void update(float dT);
+		virtual void update();
 		/*!
 		*\brief Call at the end of the game loop
 		*
@@ -138,7 +138,7 @@ namespace Sq {
 		* \param r_origin : origin of the vector that will be check
 		* \param r_origin : origin of the vector that will be check
 		*/
-		bool ray_collision(const Vector r_origin, const Vector r_dest, int width, int heigth, Vector& normal);
+		bool ray_collision(const Vector r_origin, const Vector r_dest, int width, int heigth, Vector& normal,Vector &contact_point,float& t_hit_near);
 
 		/*!
 		*\brief Affect gravity to the rectangle
@@ -153,17 +153,19 @@ namespace Sq {
 		*/
 		std::map<int, bool> get_keys();
 
-		void compute_velocity(float dT);
-		void check_collision(float dT);
-		void resolve_collision(float dT);
-		void update_positon(float dT);
+		void compute_velocity();
+		void check_collision();
+		void resolve_collision();
+		void update_positon();
 
 
 	private:
 		void update_rect();
 		
 		void on_collision();
-		const Vector rigid_body_collision_resolve(float dT, const std::map<float, Rectangle*>& collisions);
+		const Vector rigid_body_collision_resolve(const std::map<float, Rectangle*>& collisions);
 		const Vector compute_gravity();
+
+		Vector instant_velo(); 
 	};
 }

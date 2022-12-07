@@ -23,6 +23,10 @@ struct Vector
 		r.y = y * v.y;
 		return r;
 	}
+
+	bool operator!=(const Vector v) {
+		return (x != v.x || y != v.y);
+	}
 	Vector operator/(Vector v) {
 		Vector r;
 		r.x = x / v.x;

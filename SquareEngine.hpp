@@ -17,6 +17,8 @@ namespace Sq {
 		Vector _mouse_pos; /* Mouse postions in the window coordinate*/
 		std::map<int, bool> _keys;
 
+		const float fps_cap = 60.0;
+
 	public:
 		/* \brief Main class of the Engine
 		* Start an instance of the Engine that will open a new window

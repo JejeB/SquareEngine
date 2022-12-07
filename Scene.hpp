@@ -19,6 +19,7 @@ namespace Sq {
 		Vector _origin;/* Origin of the scene it will be the 0,0 point foir all the rectangles*/
 		std::vector<Rectangle*> _items; /* List of rectangle to display and manage*/
 		bool _debug; /*Boolean to know if the class is in debug mode*/
+		float _dt;/*Time get beetween frame*/
 	public:
 		Scene(SquareEngine* engine);
 		void init(SDL_Renderer* renderer);
@@ -46,6 +47,8 @@ namespace Sq {
 		Vector map_to_scene(Vector v) { return v - _origin; }
 		Vector map_to_view(Vector v) { return  _origin - v; }
 
+		float get_dT() const{ return _dt; }
+
 		void set_Camera(Vector focus, int width, int height) { _origin.x = width / 2 - focus.x; _origin.y = height / 2 - focus.y; }
 
 		void update(float dT);
@@ -53,10 +56,10 @@ namespace Sq {
 
 	private:
 		void draw_debug(SDL_Renderer* renderer);
-		void compute_rects_velocities(float dT);
-		void detect_collisions(float dT);
-		void resolve_collisions(float dT);
-		void updates_positons(float dT);
+		void compute_rects_velocities();
+		void detect_collisions();
+		void resolve_collisions();
+		void updates_positons();
 	};
 }
 
