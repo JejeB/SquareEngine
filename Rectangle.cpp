@@ -65,8 +65,11 @@ void Rectangle::compute_velocity() {
 
 void Rectangle::resolve_collision() {
 	Vector collisions{ 0,0 };
-	if (_is_rigid)
+	if (_is_rigid) {
 		collisions = rigid_body_collision_resolve(_collision_rects);
+		SDL_Log("Correction %f %f", collisions.x, collisions.y);
+	}
+		
 	_velocity = _velocity + collisions;
 }
 
@@ -84,7 +87,7 @@ void Rectangle::check_collision() {
 		if (r != this) {
 			if (r->ray_collision(_pos, _pos + instant_velo(), _width, _height, n, c,f)) {
 				const float dist = _pos.dist(r->get_contact_point());
-				//SDL_Log("Collisions: %f %f", _pos.y, instant_velo().y);
+				//SDL_Log("Collisions: %f %f %f", _pos.x,_pos.y, instant_velo().y);
 				_collision_rects[dist] = r; //Add the distance the the colliosion map, so the map is sorted by distance of collionsion
 				r->add_coll(dist, this);
 			}
@@ -110,6 +113,9 @@ const Vector Rectangle::rigid_body_collision_resolve(const std::map<float, Recta
 		if (it.second->ray_collision(_pos, _pos + instant_velo(), _width, _height, normal, contact,f)) {
 				correction = correction + (_velocity.abs() * normal).by(1-f);	
 		}
+	}
+	if (correction.x != 0) {
+		SDL_Log("What !");
 	}
 	return correction;
 }
