@@ -25,7 +25,7 @@ set (HEADERS	Rectangle.hpp
 		PhysicSpace.hpp
 		StaticRectangle.cpp
 		SquareEngine.hpp
-		GraphicsObject.hpp
+		GraphicObject.hpp
 		utils/Color.hpp
 		utils/Vector.hpp)
 		

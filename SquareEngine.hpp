@@ -1,6 +1,7 @@
 #pragma once
 #include"SDL.h"
-#include "Scene.hpp"
+#include <map>
+#include "utils/Vector.hpp"
 
 namespace Sq {
 
@@ -12,7 +13,6 @@ namespace Sq {
 		SDL_Renderer* _pRenderer; /*Renderer that will be updated by the rectangles */
 		SDL_Event _events; /* List of the events that happend on the windows */
 		bool _isOpen; /* Check if the game is still up*/
-		Scene* _scene; /*Scene that will be display*/
 		Uint32 _last_update; /* Used to compute the time between two frame*/
 		float _delta;
 		Vector _mouse_pos; /* Mouse postions in the window coordinate*/
@@ -28,11 +28,7 @@ namespace Sq {
 		* \param w : height of the window in pixels
 		*/
 		SquareEngine(int w, int h);
-		/*\brief Set the scene to display in the window
-		*
-		* \param s: Pointer to a scene to display
-		*/
-		void set_Scene(Scene* s) { _scene = s; }
+		
 		/*\brief Return if the game is still playing or not
 		*
 		* \return Boolean true if the game is still playing else false

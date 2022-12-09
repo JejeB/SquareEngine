@@ -4,7 +4,7 @@
 
 using namespace Sq;
 
-SquareEngine::SquareEngine(int w, int h): _width(w),_height(h),_pWindow(nullptr),_pRenderer(nullptr),_events(),_isOpen(true),_scene(nullptr),_last_update(),_mouse_pos() 
+SquareEngine::SquareEngine(int w, int h): _width(w),_height(h),_pWindow(nullptr),_pRenderer(nullptr),_events(),_isOpen(true),_last_update(),_mouse_pos() 
 {}
 
 int SquareEngine::game_init() {
@@ -20,7 +20,7 @@ int SquareEngine::game_init() {
         return EXIT_FAILURE;
     }
 
-        _scene->init(_pRenderer);
+     
     srand((unsigned int)time(NULL));
     _last_update = SDL_GetTicks();
     return EXIT_SUCCESS;
@@ -35,22 +35,18 @@ void SquareEngine::game_update() {
 
         SDL_SetRenderDrawColor(_pRenderer, 0, 0, 0, 255);
         SDL_RenderClear(_pRenderer);
-
-
         float dT = _delta / 1000.0f;
-        if (_scene != NULL) 
-            _scene->update(dT);
+
+        //update rootPhysicSpace
+        
         _last_update = time;
     }
 }
 
 void SquareEngine::game_frame_renderer() {
     if (_delta > 1000 / fps_cap) {
-        if (_scene != NULL) {
-            _scene->draw(_pRenderer);
-            _scene->clear();
-        }
-        
+       
+        //render
         SDL_RenderPresent(_pRenderer);
     }
     
@@ -67,7 +63,6 @@ void SquareEngine::manage_events() {
             _isOpen = false;
             break;
         case SDL_KEYDOWN:
-            //SDL_Log("%d", _events.key.keysym.sym);
             _keys[_events.key.keysym.sym] = true;
             break;
         case SDL_KEYUP:

@@ -161,8 +161,7 @@ namespace Sq {
 		void update_positon();
 		void clear();
 
-		void ad
-			d_coll(float d, Rectangle* r) { _collision_rects[d] = r; }
+		void add_coll(float d, Rectangle* r) { _collision_rects[d] = r; }
 
 	private:
 		void update_rect();
