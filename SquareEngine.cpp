@@ -1,10 +1,13 @@
 #include "SquareEngine.hpp"
+#include "SDL.h"
 #include <cstdlib>
 #include <time.h>
 
+#include "PhysicSpace.hpp"
+
 using namespace Sq;
 
-SquareEngine::SquareEngine(int w, int h): _width(w),_height(h),_pWindow(nullptr),_pRenderer(nullptr),_events(),_isOpen(true),_last_update(),_mouse_pos() 
+SquareEngine::SquareEngine(int w, int h): _width(w),_height(h),_pWindow(nullptr),_pRenderer(nullptr),_isOpen(true),_last_update(),_mouse_pos(),_delta(0),_root_space(NULL)
 {}
 
 int SquareEngine::game_init() {
@@ -23,6 +26,11 @@ int SquareEngine::game_init() {
      
     srand((unsigned int)time(NULL));
     _last_update = SDL_GetTicks();
+
+    if (_root_space != NULL) {
+        _root_space->init(_pRenderer);
+    }
+
     return EXIT_SUCCESS;
 }
 
@@ -38,6 +46,9 @@ void SquareEngine::game_update() {
         float dT = _delta / 1000.0f;
 
         //update rootPhysicSpace
+        if (_root_space != NULL) {
+            _root_space->update();
+        }
         
         _last_update = time;
     }
@@ -45,8 +56,9 @@ void SquareEngine::game_update() {
 
 void SquareEngine::game_frame_renderer() {
     if (_delta > 1000 / fps_cap) {
-       
-        //render
+        if (_root_space != NULL) {
+            _root_space->render(_pRenderer);
+        }
         SDL_RenderPresent(_pRenderer);
     }
     
@@ -54,7 +66,8 @@ void SquareEngine::game_frame_renderer() {
 
 void SquareEngine::manage_events() {
     int x; int y;
-    
+
+    SDL_Event _events; /* List of the events that happend on the windows */
     while (SDL_PollEvent(&_events))
     {
         switch (_events.type)

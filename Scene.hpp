@@ -63,4 +63,3 @@ namespace Sq {
 		void updates_positons();
 	};
 }
-

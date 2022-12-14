@@ -23,7 +23,7 @@ set (SRCS
 set (HEADERS	Rectangle.hpp
 		Scene.hpp
 		PhysicSpace.hpp
-		StaticRectangle.cpp
+		StaticRectangle.hpp
 		SquareEngine.hpp
 		GraphicObject.hpp
 		utils/Color.hpp

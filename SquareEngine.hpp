@@ -1,9 +1,13 @@
 #pragma once
-#include"SDL.h"
 #include <map>
 #include "utils/Vector.hpp"
 
+struct SDL_Window;
+struct SDL_Renderer;
+union SDL_Events;
+
 namespace Sq {
+	class PhysicSpace;
 
 	class SquareEngine
 	{
@@ -11,14 +15,15 @@ namespace Sq {
 		int _height; /*Vertical size of the game in pixels */
 		SDL_Window* _pWindow;/*Pointer of the SDL Windows used to dislpay the renderer*/
 		SDL_Renderer* _pRenderer; /*Renderer that will be updated by the rectangles */
-		SDL_Event _events; /* List of the events that happend on the windows */
 		bool _isOpen; /* Check if the game is still up*/
-		Uint32 _last_update; /* Used to compute the time between two frame*/
+		int _last_update; /* Used to compute the time between two frame*/
 		float _delta;
 		Vector _mouse_pos; /* Mouse postions in the window coordinate*/
 		std::map<int, bool> _keys;
 
-		const float fps_cap = 3.0;
+		const float fps_cap = 60.0;
+
+		PhysicSpace* _root_space;
 
 	public:
 		/* \brief Main class of the Engine
@@ -63,6 +68,8 @@ namespace Sq {
 		*This function will close the game and free all the memory
 		*/
 		void game_close();
+
+		void set_root_space(PhysicSpace* ps) { _root_space = ps; }
 
 	private:
 		void manage_events();
