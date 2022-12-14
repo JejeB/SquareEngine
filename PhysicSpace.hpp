@@ -27,5 +27,8 @@ namespace Sq {
 
 		void set_delta_time(float dT) { _dT = dT; }
 
+	private:
+		void set_dynamics_vs_statics(DynamicRectangle* dyn);
+		bool ray_collision(Vector r_vec, const DynamicRectangle* dyn_rect, const StaticRectangle* static_rect, Vector& normal, Vector& contact_point, float& t_hit_near);
 	};
 }

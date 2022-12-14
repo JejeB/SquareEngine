@@ -11,6 +11,12 @@ struct Vector
 		r.y = v.y + y;
 		return r;
 	}
+	const Vector operator+(const Vector v) const{
+		Vector r;
+		r.x = v.x + x;
+		r.y = v.y + y;
+		return r;
+	}
 	Vector operator-(Vector v) {
 		Vector r;
 		r.x = x - v.x;

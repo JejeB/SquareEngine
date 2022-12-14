@@ -1,10 +1,10 @@
 #pragma once
-#include "StaticRectangle.hpp"
+#include "Rectangle.hpp"
 #include "utils/Vector.hpp"
 namespace Sq {
 	class GraphicObject;
 
-	class DynamicRectangle : public StaticRectangle {
+	class DynamicRectangle : public Rectangle {
 		Vector _velocity;
 
 	public:
