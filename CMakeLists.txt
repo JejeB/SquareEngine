@@ -18,12 +18,14 @@ set (SRCS
 		Scene.cpp
 		PhysicSpace.cpp
 		StaticRectangle.cpp
+		DynamicRectangle.cpp
 		SquareEngine.cpp)
 
 set (HEADERS	Rectangle.hpp
 		Scene.hpp
 		PhysicSpace.hpp
 		StaticRectangle.hpp
+		DynamicRectangle.hpp
 		SquareEngine.hpp
 		GraphicObject.hpp
 		utils/Color.hpp

@@ -47,6 +47,7 @@ void SquareEngine::game_update() {
 
         //update rootPhysicSpace
         if (_root_space != NULL) {
+            _root_space->set_delta_time(dT);
             _root_space->update();
         }
         

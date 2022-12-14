@@ -5,9 +5,15 @@
 class SDL_Renderer;
 
 namespace Sq {
+	class DynamicRectangle;
+	class StaticRectangle;
+
 	class PhysicSpace : public GraphicObject{
 		std::vector<GraphicObject*> _items;
+		std::vector<DynamicRectangle*> _dynamics;
+		std::vector<StaticRectangle*> _statics;
 		bool _debug;
+		float _dT;
 	public:
 		PhysicSpace(float x, float y, const GraphicObject* parent);
 		void init(SDL_Renderer* renderer)override;
@@ -18,6 +24,8 @@ namespace Sq {
 		void removeItem(GraphicObject* item);
 
 		void set_debug() { _debug = true; }
+
+		void set_delta_time(float dT) { _dT = dT; }
 
 	};
 }

@@ -4,10 +4,12 @@
 #include "utils/Color.hpp"
 
 struct SDL_Texture;
+struct SDL_Rect;
 
 namespace Sq {
 	class StaticRectangle : public GraphicObject{
-		Vector _bottom_right;
+	protected:
+		Vector _size;
 		Color _color;
 		std::string _sprite_path; /* !< Path of the sprite to display*/
 		SDL_Texture* _sprite;  /*!< Data of the sprite texture*/
@@ -19,9 +21,8 @@ namespace Sq {
 
 		 void setColor(const Color& c) { _color = c; }
 
-		 float width() { return _bottom_right.x - _origin.x; }
-		 float height() { return _bottom_right.y - _origin.y; }
-
 		 void add_sprite(const std::string& path) { _sprite_path = path; }
+	private:
+		void compute_outline(SDL_Rect* rect);
 	};
 }
