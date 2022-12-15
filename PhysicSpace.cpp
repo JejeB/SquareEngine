@@ -27,15 +27,34 @@ void Sq::PhysicSpace::update()
 }
 
 void Sq::PhysicSpace::set_dynamics_vs_statics(DynamicRectangle* dyn) {
+	std::multimap<float, StaticRectangle*> collisions;
+	Vector instant = dyn->get_velocity().by(_dT);
+
 	for (auto s : _statics) {
-		Vector instant= dyn->get_velocity().by(_dT);
 		Vector normal; Vector contact_point; 
 		float time;
 		if (ray_collision(instant, dyn, s, normal, contact_point, time)) {
-			dyn->set_collision(true);
-			s->set_collision(true);
+			float collisions_distance = dyn->get_origin().dist(contact_point);
+			collisions.insert({ collisions_distance,s });// The map is automaticly sort by collisions distance
 		}
 	}
+
+	//if rigid_body resolve colliosion
+	resolve_rigid_body_collisions(dyn, collisions);
+}
+
+void Sq::PhysicSpace::resolve_rigid_body_collisions(Sq::DynamicRectangle* dyn, const std::multimap<float, StaticRectangle*>& collisions) {
+	for (const auto it : collisions) {
+		Vector normal; Vector contact; float time;
+		Vector instant = dyn->get_velocity().by(_dT);
+		if (ray_collision(instant, dyn, it.second, normal, contact, time)) {
+			Vector correction = ((dyn->get_velocity().abs() * normal).by(1 - time));
+			if (time >= 0.0 && time < 1) {
+				dyn->set_velocity(dyn->get_velocity() + correction);
+			}
+		}
+	}
+	
 }
 
 void Sq::PhysicSpace::render(SDL_Renderer *renderer)
@@ -74,10 +93,9 @@ void Sq::PhysicSpace::removeItem(GraphicObject* item)
 
 bool Sq::PhysicSpace::ray_collision(Vector dist,const DynamicRectangle *dyn, const StaticRectangle * st, Vector& normal, Vector& contact_point, float& t_hit_near) {
 
+	
 	Vector expand_pos = st->get_origin() - dyn->get_size();
 	Vector expand_size = st->get_size() + dyn->get_size();
-
-
 	Vector t_near = (expand_pos - dyn->get_origin()) / dist;
 	Vector t_far = (expand_pos + expand_size - dyn->get_origin()) / dist;
 

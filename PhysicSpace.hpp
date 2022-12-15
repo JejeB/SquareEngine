@@ -1,7 +1,7 @@
 #pragma once
 #include "GraphicObject.hpp"
 #include <vector>
-
+#include <map>
 class SDL_Renderer;
 
 namespace Sq {
@@ -30,5 +30,6 @@ namespace Sq {
 	private:
 		void set_dynamics_vs_statics(DynamicRectangle* dyn);
 		bool ray_collision(Vector dist, const DynamicRectangle* dyn, const StaticRectangle* st, Vector& normal, Vector& contact_point, float& t_hit_near);
-		};
+		void resolve_rigid_body_collisions(DynamicRectangle* dyn, const std::multimap<float, StaticRectangle*>& collisions);
+	};
 }
