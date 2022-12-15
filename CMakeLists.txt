@@ -15,12 +15,17 @@ include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
 
 set (SRCS
 		Rectangle.cpp
-		Scene.cpp
+		PhysicSpace.cpp
+		StaticRectangle.cpp
+		DynamicRectangle.cpp
 		SquareEngine.cpp)
 
 set (HEADERS	Rectangle.hpp
-		Scene.hpp
+		PhysicSpace.hpp
+		StaticRectangle.hpp
+		DynamicRectangle.hpp
 		SquareEngine.hpp
+		GraphicObject.hpp
 		utils/Color.hpp
 		utils/Vector.hpp)
 		
