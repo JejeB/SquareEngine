@@ -3,6 +3,7 @@
 #include "SDL.h"
 #include "DynamicRectangle.hpp"
 #include "StaticRectangle.hpp"
+#include "Rectangle.hpp"
 
 Sq::PhysicSpace::PhysicSpace(float x, float y, const GraphicObject* parent):GraphicObject(x,y,parent),_debug(false),_dT(0)
 {}
@@ -17,13 +18,15 @@ void Sq::PhysicSpace::init(SDL_Renderer* renderer)
 void Sq::PhysicSpace::update()
 {
 	//Dynamics vs statics coll
-	for (auto dyn : _dynamics) {
+	for (auto dyn : _dynamics) 
 		set_dynamics_vs_statics(dyn);
-	}
 
 	//Update Dynmacis positions
-	for  (auto dyn:_dynamics)
+	for  (auto dyn : _dynamics)
 		dyn->translate(dyn->get_velocity().by(_dT));
+	//Do all detection collisions
+	for (auto dyn : _dynamics)
+		collisions_detection(dyn);
 }
 
 void Sq::PhysicSpace::set_dynamics_vs_statics(DynamicRectangle* dyn) {
@@ -55,6 +58,35 @@ void Sq::PhysicSpace::resolve_rigid_body_collisions(Sq::DynamicRectangle* dyn, c
 		}
 	}
 	
+}
+
+void Sq::PhysicSpace::collisions_detection(DynamicRectangle* dyn)
+{
+	for (Rectangle* r : _statics) {
+		if (rectangle_vs_rectangle_collision(dyn,r) ) {
+			r->set_collision(true);
+			dyn->set_collision(true);
+		}
+	}
+	for (Rectangle* r : _dynamics) {
+		if (r!=dyn && rectangle_vs_rectangle_collision(dyn, r)) {
+			r->set_collision(true);
+			dyn->set_collision(true);
+		}
+	}
+}
+
+bool Sq::PhysicSpace::rectangle_vs_rectangle_collision(const Sq::Rectangle* r1, const Sq::Rectangle* r2)
+{
+	if (r1->get_origin().x + r1->get_size().x >= r2->get_origin().x &&
+		r1->get_origin().y + r1->get_size().y >= r2->get_origin().y &&
+		r1->get_origin().x <= r2->get_origin().x + r2->get_size().x &&
+		r1->get_origin().y <= r2->get_origin().y + r2->get_size().y) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 void Sq::PhysicSpace::render(SDL_Renderer *renderer)
