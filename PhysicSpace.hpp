@@ -29,6 +29,6 @@ namespace Sq {
 
 	private:
 		void set_dynamics_vs_statics(DynamicRectangle* dyn);
-		bool ray_collision(Vector r_vec, const DynamicRectangle* dyn_rect, const StaticRectangle* static_rect, Vector& normal, Vector& contact_point, float& t_hit_near);
-	};
+		bool ray_collision(Vector dist, const DynamicRectangle* dyn, const StaticRectangle* st, Vector& normal, Vector& contact_point, float& t_hit_near);
+		};
 }

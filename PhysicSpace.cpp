@@ -31,9 +31,7 @@ void Sq::PhysicSpace::set_dynamics_vs_statics(DynamicRectangle* dyn) {
 		Vector instant= dyn->get_velocity().by(_dT);
 		Vector normal; Vector contact_point; 
 		float time;
-		bool b = ray_collision(instant, dyn, s, normal, contact_point, time);
-		SDL_Log("%d", b);
-		if (b) {
+		if (ray_collision(instant, dyn, s, normal, contact_point, time)) {
 			dyn->set_collision(true);
 			s->set_collision(true);
 		}
@@ -74,14 +72,14 @@ void Sq::PhysicSpace::removeItem(GraphicObject* item)
 	//TODO
 }
 
-bool Sq::PhysicSpace::ray_collision(Vector r_vec,const Sq::DynamicRectangle* dyn_rect,const Sq::StaticRectangle* static_rect, Vector& normal, Vector& contact_point, float& t_hit_near) {
+bool Sq::PhysicSpace::ray_collision(Vector dist,const DynamicRectangle *dyn, const StaticRectangle * st, Vector& normal, Vector& contact_point, float& t_hit_near) {
 
-	Vector expand_origin = static_rect->get_origin() - dyn_rect->get_size();
-	Vector expand_size = static_rect->get_size() + dyn_rect->get_size();
-	Vector dist = r_vec - dyn_rect->get_origin();
+	Vector expand_pos = st->get_origin() - dyn->get_size();
+	Vector expand_size = st->get_size() + dyn->get_size();
 
-	Vector t_near = (expand_origin - dyn_rect->get_origin()) / dist;
-	Vector t_far = (expand_origin + expand_size - dyn_rect->get_origin()) / dist;
+
+	Vector t_near = (expand_pos - dyn->get_origin()) / dist;
+	Vector t_far = (expand_pos + expand_size - dyn->get_origin()) / dist;
 
 	if (isnan(t_far.y) || isnan(t_far.x)) return false;
 	if (isnan(t_near.y) || isnan(t_near.x)) return false;
@@ -96,10 +94,11 @@ bool Sq::PhysicSpace::ray_collision(Vector r_vec,const Sq::DynamicRectangle* dyn
 	// Furthest 'time' is contact on opposite side of target
 	float t_hit_far = std::min(t_far.x, t_far.y);
 
-	if (t_hit_far < 0 || t_hit_near>1 || t_hit_near < 0) return false;
+	if (t_hit_far < 0 || t_hit_near>1) return false;
 
-	contact_point.x = dyn_rect->get_origin().x + t_hit_near * dist.x;
-	contact_point.y = dyn_rect->get_origin().y + t_hit_near * dist.y;
+	
+	contact_point.x = dyn->get_origin().x + t_hit_near * dist.x;
+	contact_point.y = dyn->get_origin().y + t_hit_near * dist.y;
 
 	if (t_near.x > t_near.y)
 		if (dist.x < 0)
