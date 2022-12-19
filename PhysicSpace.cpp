@@ -17,6 +17,8 @@ void Sq::PhysicSpace::init(SDL_Renderer* renderer)
 
 void Sq::PhysicSpace::update()
 {
+	for (auto item : _items)
+		item->update();
 	//Dynamics vs statics coll
 	for (auto dyn : _dynamics) 
 		set_dynamics_vs_statics(dyn);

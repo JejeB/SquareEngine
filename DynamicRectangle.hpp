@@ -11,8 +11,11 @@ namespace Sq {
 	public:
 		DynamicRectangle(float x, float y, float width, float height, const GraphicObject * parent);
 
+		void reset()override;
+		void update()override;
+
 		void set_velocity(const Vector& v) { _velocity = v; }
-		void add_velocity(const Vector& v) { _other_velo = _other_velo + v; }
+		void add_velocity(const Vector& v);
 		Vector get_velocity() { return _velocity; }
 
 		void set_width(float w) { _size.x = w; };
