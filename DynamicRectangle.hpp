@@ -6,11 +6,16 @@ namespace Sq {
 
 	class DynamicRectangle : public Rectangle {
 		Vector _velocity;
+		Vector _other_velo;
 
 	public:
 		DynamicRectangle(float x, float y, float width, float height, const GraphicObject * parent);
 
+		void reset()override;
+		void update()override;
+
 		void set_velocity(const Vector& v) { _velocity = v; }
+		void add_velocity(const Vector& v);
 		Vector get_velocity() { return _velocity; }
 
 		void set_width(float w) { _size.x = w; };
