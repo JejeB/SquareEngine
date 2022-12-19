@@ -17,10 +17,11 @@ void Sq::PhysicSpace::init(SDL_Renderer* renderer)
 
 void Sq::PhysicSpace::update()
 {
+	for (auto item : _items)
+		item->update();
 	//Dynamics vs statics coll
 	for (auto dyn : _dynamics) 
 		set_dynamics_vs_statics(dyn);
-
 	//Update Dynmacis positions
 	for  (auto dyn : _dynamics)
 		dyn->translate(dyn->get_velocity().by(_dT));
@@ -32,7 +33,6 @@ void Sq::PhysicSpace::update()
 void Sq::PhysicSpace::set_dynamics_vs_statics(DynamicRectangle* dyn) {
 	std::multimap<float, StaticRectangle*> collisions;
 	Vector instant = dyn->get_velocity().by(_dT);
-
 	for (auto s : _statics) {
 		Vector normal; Vector contact_point; 
 		float time;
@@ -41,7 +41,6 @@ void Sq::PhysicSpace::set_dynamics_vs_statics(DynamicRectangle* dyn) {
 			collisions.insert({ collisions_distance,s });// The map is automaticly sort by collisions distance
 		}
 	}
-
 	//if rigid_body resolve colliosion
 	resolve_rigid_body_collisions(dyn, collisions);
 }
@@ -54,10 +53,10 @@ void Sq::PhysicSpace::resolve_rigid_body_collisions(Sq::DynamicRectangle* dyn, c
 			Vector correction = ((dyn->get_velocity().abs() * normal).by(1 - time));
 			if (time >= 0.0 && time < 1) {
 				dyn->set_velocity(dyn->get_velocity() + correction);
+				set_dynamics_vs_statics(dyn); // We need to do a recurution to test if the corrected vector don't collide with a rectangle
 			}
 		}
 	}
-	
 }
 
 void Sq::PhysicSpace::collisions_detection(DynamicRectangle* dyn)

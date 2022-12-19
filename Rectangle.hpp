@@ -29,7 +29,7 @@ namespace Sq {
 
 		void set_collision(bool c) { _on_collision = c; }
 
-		void reset();
+		virtual void reset();
 
 	private:
 		void compute_outline(SDL_Rect* rect);
