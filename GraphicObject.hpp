@@ -1,5 +1,6 @@
 #pragma once
 #include "utils/Vector.hpp"
+#include <map>
 
 class SDL_Renderer;
 
@@ -14,6 +15,7 @@ namespace Sq {
 		virtual void init(SDL_Renderer* renderer) {};
 		virtual void update() {};
 		virtual void render(SDL_Renderer* renderer) {};
+		virtual void events( std::map<int, bool>& _keys) {};
 
 		void set_origin(Vector v) { _origin = v; }
 		Vector get_origin()const { return _origin; }

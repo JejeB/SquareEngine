@@ -95,6 +95,9 @@ void SquareEngine::manage_events() {
     SDL_GetMouseState(&x, &y);
     _mouse_pos.x = (float)x;
     _mouse_pos.y = (float)y;
+    //call events
+    if(!_keys.empty())
+        _root_space->events(_keys);
 }
 void SquareEngine::game_close() {
     SDL_DestroyRenderer(_pRenderer); 

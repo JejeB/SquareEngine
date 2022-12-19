@@ -106,6 +106,13 @@ void Sq::PhysicSpace::render(SDL_Renderer *renderer)
 	}
 }
 
+void Sq::PhysicSpace::events(std::map<int, bool>& _keys)
+{
+	for (auto item : _items) {
+		item->events(_keys);
+	}
+}
+
 void Sq::PhysicSpace::addItem(GraphicObject* item)
 {
 	_items.push_back(item);

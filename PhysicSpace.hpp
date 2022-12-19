@@ -20,6 +20,7 @@ namespace Sq {
 		void init(SDL_Renderer* renderer)override;
 		void update()override;
 		void render(SDL_Renderer * renderer)override;
+		void events(std::map<int, bool>& _keys)override;
 
 		void addItem(GraphicObject * item);
 		void removeItem(GraphicObject* item);
