@@ -52,7 +52,7 @@ void Sq::PhysicSpace::resolve_rigid_body_collisions(Sq::DynamicRectangle* dyn, c
 		if (ray_collision(instant, dyn, it.second, normal, contact, time)) {
 			Vector correction = ((dyn->get_velocity().abs() * normal).by(1 - time));
 			if (time >= 0.0 && time < 1) {
-				dyn->set_velocity(dyn->get_velocity() + correction);
+				dyn->add_forces(correction);
 				set_dynamics_vs_statics(dyn); // We need to do a recurution to test if the corrected vector don't collide with a rectangle
 			}
 		}
