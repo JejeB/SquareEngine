@@ -2,7 +2,7 @@
 
 No rotation, no stranges shapes only rectangles !
 
-This game project is a 2D game engine who work only with parallel square. 
+This game project is a 2D game engine who work only with parallels squares. 
 This engine focus on some pretty simples fonctions that you can combine to do lot of thing.
 - Display a window
 - A scene where you can add rectangles
@@ -10,9 +10,8 @@ This engine focus on some pretty simples fonctions that you can combine to do lo
 - Add sprite to this rectangles
 - Events detections
 - Collisions detections and resolutions
-- Gravity
 
-Basicly this library is just a wrap of the SDL2 with some useful functions that are boring to implement. 
+Basicly this library is a wrap of the SDL2 with some useful functions that are boring to implement. 
 It's a nice sandbox to do some prototyping or learning.
 
 ## Getting started
@@ -54,8 +53,9 @@ Create a `Main.cpp` file :
 
 ``` c++
 #include "SquareEngine.hpp"
-#include "Scene.hpp"
-#include "Rectangle.hpp"
+#include "PhysicSpace.hpp"
+#include "DynamicRectangle.hpp"
+#include "StaticRectangle.hpp"
 #include "utils/Vector.hpp"
 
 int main(int argc, char* argv[])
@@ -64,32 +64,23 @@ int main(int argc, char* argv[])
     int height = 720;
     Sq::SquareEngine sq(width, height); //Init the Engine
 
-    Sq::Scene s; // Create a scene where you will had the rectangles
-    s.set_debug();
-    s.set_origin(Vector{ 100,100 }); // Move a bit the scene a bit, this can be use to had a camera system
-    sq.set_Scene(&s);
+    Sq::PhysicSpace scene(0, 0, NULL);
+    sq.set_root_space(&scene);
 
-    Sq::Rectangle player(&s, 500, 0, 30, 30, Color{ 255,0,255 }); //Add a pink rectangle
-    s.add_item(&player);
+    Sq::DynamicRectangle p(10, 10, 30, 50, &scene);
+    p.setColor(Color{ 250,0,250 });
+    scene.addItem(&p);
 
-    Sq::Rectangle ob1(&s, 400, 400, 200, 40, Color{ 255,255,255 }); //And somes obstacles
-    s.add_item(&ob1);
-
-    Sq::Rectangle ob2(&s, 50, 100, 50, 100, Color{ 255,255,255 });
-    s.add_item(&ob2);
-
-    Sq::Rectangle ob3(&s, 500, 100, 50, 100, Color{ 255,255,255 });
-    s.add_item(&ob3);
-
-    Sq::Rectangle ob4(&s, 400, 200, 50, 50, Color{ 255,255,255 });
-    s.add_item(&ob4);
+    Sq::StaticRectangle obstacle1(100, 500, 800, 5, &scene);
+    obstacle1.setColor(Color{ 250,250,250 });
+    scene.addItem(&obstacle1);
 
     sq.game_init(); // At the end call the init method() it will load the sprites if there are somes
     while (sq.is_game_up()) // Loop since the game is up
     {
-        Vector v = s.map_to_scene(sq.mouse_pos()) - player.get_pos();
-        player.set_velocity(v.by(10)); // Make the player following the mouse
-        sq.game_loop();// To compute and display
+        p.set_velocity((sq.mouse_pos() - p.get_origin()).by(5)); // Make the purple rectangle follow the mouse
+        sq.game_update();
+        sq.game_frame_renderer();
     }
     sq.game_close(); // Free memory etc...
     return EXIT_SUCCESS;
