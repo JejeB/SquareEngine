@@ -1,5 +1,7 @@
 # Square Engine
 
+![logo](logo.png)
+
 No rotation, no stranges shapes only rectangles !
 
 This game project is a 2D game engine who work only with parallel square. 
