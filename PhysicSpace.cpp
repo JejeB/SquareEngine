@@ -53,7 +53,7 @@ void Sq::PhysicSpace::resolve_rigid_body_collisions(Sq::DynamicRectangle* dyn, c
 			Vector correction = ((dyn->get_velocity().abs() * normal).by(1 - time));
 			if (time >= 0.0 && time < 1) {
 				dyn->add_forces(correction);
-				set_dynamics_vs_statics(dyn); // We need to do a recurution to test if the corrected vector don't collide with a rectangle
+				//set_dynamics_vs_statics(dyn); // We need to do a recurution to test if the corrected vector don't collide with a rectangle
 			}
 		}
 	}
@@ -124,10 +124,6 @@ void Sq::PhysicSpace::addItem(GraphicObject* item)
 	
 }
 
-void Sq::PhysicSpace::removeItem(GraphicObject* item)
-{
-	//TODO
-}
 
 bool Sq::PhysicSpace::ray_collision(Vector dist,const DynamicRectangle *dyn, const StaticRectangle * st, Vector& normal, Vector& contact_point, float& t_hit_near) {
 

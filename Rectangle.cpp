@@ -29,14 +29,8 @@ void Sq::Rectangle::compute_outline(SDL_Rect* rect) {
 void Sq::Rectangle::render(SDL_Renderer* renderer) {
 	SDL_Rect rect;
 	compute_outline(&rect);
-	Color c;
-	if (_on_collision)
-		c = Color{ 255,0,0 };
-	else
-		c = _color;
-
 	if (_color.r != -1) {
-		SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, 100);
+		SDL_SetRenderDrawColor(renderer, _color.r, _color.g, _color.b, 100);
 		SDL_RenderDrawRect(renderer, &rect);
 	}
 	if (_sprite != NULL) {
